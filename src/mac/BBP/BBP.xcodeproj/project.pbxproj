@@ -10,6 +10,8 @@
 		2F78A0BD180ECCAF0075839D /* libopencv_core.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F78A0BC180ECCAF0075839D /* libopencv_core.dylib */; };
 		2F78A0BF180ECCC20075839D /* libopencv_imgproc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F78A0BE180ECCC20075839D /* libopencv_imgproc.dylib */; };
 		2F78A0C1180ECCC80075839D /* libopencv_highgui.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2F78A0C0180ECCC80075839D /* libopencv_highgui.dylib */; };
+		2F78A0C9180ECF960075839D /* postit_flash.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F78A0C7180ECF900075839D /* postit_flash.jpg */; };
+		2F78A0CA180ECF980075839D /* postit_noflash.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F78A0C8180ECF900075839D /* postit_noflash.jpg */; };
 		2FB8B045180D89CF00EDC8E9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FB8B044180D89CF00EDC8E9 /* main.cpp */; };
 		2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FB8B046180D89CF00EDC8E9 /* BBP.1 */; };
 /* End PBXBuildFile section */
@@ -17,13 +19,15 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		2FB8B03F180D89CF00EDC8E9 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
+			buildActionMask = 12;
+			dstPath = "";
+			dstSubfolderSpec = 16;
 			files = (
 				2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */,
+				2F78A0C9180ECF960075839D /* postit_flash.jpg in CopyFiles */,
+				2F78A0CA180ECF980075839D /* postit_noflash.jpg in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -31,6 +35,8 @@
 		2F78A0BC180ECCAF0075839D /* libopencv_core.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_core.dylib; path = /usr/local/lib/libopencv_core.dylib; sourceTree = "<absolute>"; };
 		2F78A0BE180ECCC20075839D /* libopencv_imgproc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_imgproc.dylib; path = /usr/local/lib/libopencv_imgproc.dylib; sourceTree = "<absolute>"; };
 		2F78A0C0180ECCC80075839D /* libopencv_highgui.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_highgui.dylib; path = /usr/local/lib/libopencv_highgui.dylib; sourceTree = "<absolute>"; };
+		2F78A0C7180ECF900075839D /* postit_flash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = postit_flash.jpg; sourceTree = "<group>"; };
+		2F78A0C8180ECF900075839D /* postit_noflash.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = postit_noflash.jpg; sourceTree = "<group>"; };
 		2FB8B041180D89CF00EDC8E9 /* BBP */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BBP; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FB8B044180D89CF00EDC8E9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2FB8B046180D89CF00EDC8E9 /* BBP.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BBP.1; sourceTree = "<group>"; };
@@ -80,6 +86,8 @@
 		2FB8B043180D89CF00EDC8E9 /* BBP */ = {
 			isa = PBXGroup;
 			children = (
+				2F78A0C7180ECF900075839D /* postit_flash.jpg */,
+				2F78A0C8180ECF900075839D /* postit_noflash.jpg */,
 				2FB8B044180D89CF00EDC8E9 /* main.cpp */,
 				2FB8B046180D89CF00EDC8E9 /* BBP.1 */,
 			);
@@ -215,6 +223,7 @@
 		2FB8B04B180D89CF00EDC8E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
 				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -229,6 +238,7 @@
 		2FB8B04C180D89CF00EDC8E9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
 				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
