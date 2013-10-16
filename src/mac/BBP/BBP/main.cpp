@@ -32,7 +32,7 @@ int main( int, char** argv )
     std::vector<std::vector<cv::Point> > squares;
 
     find_squares(src, squares);
-    debugSquares(squares, src);
+    //debugSquares(squares, src);
     
     namedWindow( window, CV_WINDOW_AUTOSIZE );
     imshow( window, src );
@@ -43,22 +43,20 @@ int main( int, char** argv )
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image )
 {
     
-    std::cout<<"Detected "<< squares.size() << " squares";
-    
     for ( int i = 0; i< squares.size(); i++ ) {
         // draw contour
         cv::drawContours(image, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
         
         // draw bounding rect
         cv::Rect rect = boundingRect(cv::Mat(squares[i]));
-        cv::rectangle(image, rect.tl(), rect.br(), cv::Scalar(0,255,0), 2, 8, 0);
+        //cv::rectangle(image, rect.tl(), rect.br(), cv::Scalar(0,255,0), 2, 8, 0);
         
         // draw rotated rect
         cv::RotatedRect minRect = minAreaRect(cv::Mat(squares[i]));
         cv::Point2f rect_points[4];
         minRect.points( rect_points );
         for ( int j = 0; j < 4; j++ ) {
-            cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
+            //cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
         }
     }
     
@@ -78,26 +76,29 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
     // blur will enhance edge detection
     Mat blurred(image);
     medianBlur(image, blurred, 9);
-    
     Mat gray0(blurred.size(), CV_8U), gray;
     vector<vector<Point> > contours;
     
     // find squares in every color plane of the image
     for (int c = 0; c < 3; c++)
     {
+        std::cout<<">Channel at "<<c<<"\n";
+
+        
         int ch[] = {c, 0};
         mixChannels(&blurred, 1, &gray0, 1, ch, 1);
-        
+
         // try several threshold levels
-        const int threshold_level = 2;
+        const int threshold_level = 8;
         for (int l = 0; l < threshold_level; l++)
         {
+            std::cout<<">>Treshold at "<<l<<"\n";
+            
             // Use Canny instead of zero threshold level!
             // Canny helps to catch squares with gradient shading
             if (l == 0)
             {
                 Canny(gray0, gray, 10, 20, 3); //
-                
                 // Dilate helps to remove potential holes between edge segments
                 dilate(gray, gray, Mat(), Point(-1,-1));
             }
@@ -105,10 +106,11 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
             {
                 gray = gray0 >= (l+1) * 255 / threshold_level;
             }
-            
+
             // Find contours and store them in a list
             findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
             
+            std::cout<< ">>" <<contours.size() << " contours found \n";
             // Test contours
             vector<Point> approx;
             for (size_t i = 0; i < contours.size(); i++)
@@ -138,4 +140,8 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
             }
         }
     }
+    std::cout<< squares.size() << " squares found!";
+    
+    debugSquares(squares, image);
+
 }

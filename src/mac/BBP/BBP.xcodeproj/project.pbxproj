@@ -14,6 +14,7 @@
 		2F78A0CA180ECF980075839D /* postit_noflash.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2F78A0C8180ECF900075839D /* postit_noflash.jpg */; };
 		2FB8B045180D89CF00EDC8E9 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2FB8B044180D89CF00EDC8E9 /* main.cpp */; };
 		2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FB8B046180D89CF00EDC8E9 /* BBP.1 */; };
+		2FDA4988180F12C50074A6DC /* square.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FDA4987180F12C10074A6DC /* square.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 			files = (
 				2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */,
 				2F78A0C9180ECF960075839D /* postit_flash.jpg in CopyFiles */,
+				2FDA4988180F12C50074A6DC /* square.jpg in CopyFiles */,
 				2F78A0CA180ECF980075839D /* postit_noflash.jpg in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,6 +42,7 @@
 		2FB8B041180D89CF00EDC8E9 /* BBP */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BBP; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FB8B044180D89CF00EDC8E9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2FB8B046180D89CF00EDC8E9 /* BBP.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BBP.1; sourceTree = "<group>"; };
+		2FDA4987180F12C10074A6DC /* square.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,7 @@
 		2FB8B043180D89CF00EDC8E9 /* BBP */ = {
 			isa = PBXGroup;
 			children = (
+				2FDA4987180F12C10074A6DC /* square.jpg */,
 				2F78A0C7180ECF900075839D /* postit_flash.jpg */,
 				2F78A0C8180ECF900075839D /* postit_noflash.jpg */,
 				2FB8B044180D89CF00EDC8E9 /* main.cpp */,
