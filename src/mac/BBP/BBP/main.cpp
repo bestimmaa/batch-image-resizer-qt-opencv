@@ -19,7 +19,7 @@ cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat imag
 void find_squares(Mat& image, vector<vector<Point> >& squares);
 
 /// Global variables
-Mat src;
+Mat src, proc;
 const char* window = "Source image";
 
 /**
@@ -29,10 +29,11 @@ int main( int, char** argv )
 {
     /// Load source image and convert it to gray
     src = imread( argv[1], 1 );
+    proc = imread(argv[1], 1 );
     std::vector<std::vector<cv::Point> > squares;
 
-    find_squares(src, squares);
-    //debugSquares(squares, src);
+    find_squares(proc, squares);
+    debugSquares(squares, src);
     
     namedWindow( window, CV_WINDOW_AUTOSIZE );
     imshow( window, src );
@@ -82,9 +83,6 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
     // find squares in every color plane of the image
     for (int c = 0; c < 3; c++)
     {
-        std::cout<<">Channel at "<<c<<"\n";
-
-        
         int ch[] = {c, 0};
         mixChannels(&blurred, 1, &gray0, 1, ch, 1);
 
@@ -92,7 +90,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
         const int threshold_level = 8;
         for (int l = 0; l < threshold_level; l++)
         {
-            std::cout<<">>Treshold at "<<l<<"\n";
+            //std::cout<<">>Treshold at "<<l<<"\n";
             
             // Use Canny instead of zero threshold level!
             // Canny helps to catch squares with gradient shading
@@ -110,7 +108,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
             // Find contours and store them in a list
             findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
             
-            std::cout<< ">>" <<contours.size() << " contours found \n";
+            std::cout<<contours.size() << " contours found \n";
             // Test contours
             vector<Point> approx;
             for (size_t i = 0; i < contours.size(); i++)
@@ -141,7 +139,4 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
         }
     }
     std::cout<< squares.size() << " squares found!";
-    
-    debugSquares(squares, image);
-
 }
