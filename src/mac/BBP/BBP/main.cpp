@@ -6,6 +6,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core.hpp"
+#include "opencv2/calib3d/calib3d.hpp"
 
 #include <iostream>
 #include <stdio.h>
@@ -16,11 +17,25 @@ using namespace cv;
 using namespace std;
 
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image );
+cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square );
 void find_squares(Mat& image, vector<vector<Point> >& squares);
 
 /// Global variables
-Mat src, proc;
+Mat src, proc, crop;
 const char* window = "Source image";
+const char* window2 = "Destination image";
+std::vector<std::vector<cv::Point>> squares;
+int indexOfSquare = 0;
+
+
+void on_trackbar( int, void* )
+{
+    Mat srcCopy = src.clone();
+    debugSquares(squares, srcCopy, indexOfSquare);
+    imshow( window, srcCopy );
+    imshow(window2, crop);
+}
+
 
 /**
  * @function main
@@ -28,15 +43,41 @@ const char* window = "Source image";
 int main( int, char** argv )
 {
     /// Load source image and convert it to gray
+    IplImage *imageObject = cvLoadImage( argv[1]);
+    cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
+    
+    
     src = imread( argv[1], 1 );
     proc = imread(argv[1], 1 );
-    std::vector<std::vector<cv::Point> > squares;
-
-    find_squares(proc, squares);
-    debugSquares(squares, src);
-    
+    std::vector<cv::Point2f> squareTransformSource;
+    std::vector<cv::Point2f> squareTransformDestination;
+    squareTransformDestination.push_back(Point2f(0.0,0.0));
+    squareTransformDestination.push_back(Point2f(imageObject->width,0.0));
+    squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
+    squareTransformDestination.push_back(Point2f(imageObject->width,imageObject->height));
     namedWindow( window, CV_WINDOW_AUTOSIZE );
-    imshow( window, src );
+    namedWindow( window2, CV_WINDOW_AUTOSIZE);
+    find_squares(proc, squares);
+    createTrackbar("square", window, &indexOfSquare, squares.size(), on_trackbar,0);
+
+    
+    if (squares.size() > 0) {
+        std::cout<<squares[indexOfSquare]<<"\n";
+        for(std::vector<cv::Point>::iterator it = squares[indexOfSquare].begin(); it != squares[indexOfSquare].end(); ++it) {
+            squareTransformSource.push_back(cvPointTo32f(*it));
+        }
+
+        Mat src2;
+        transpose(src,src2);
+        cv::flip(src2, src2, 1);
+        Mat transform = getPerspectiveTransform(squareTransformSource, squareTransformDestination);
+        cv::warpPerspective(src, crop, transform, cvSize(imageObject->width, imageObject->height));
+        
+    }
+    
+    imshow(window, src );
+    imshow(window2, crop);
+    
     waitKey(0);
     return(0);
 }
@@ -58,6 +99,30 @@ cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat imag
         minRect.points( rect_points );
         for ( int j = 0; j < 4; j++ ) {
             //cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
+        }
+    }
+    
+    return image;
+}
+
+cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square )
+{
+    
+    for ( int i = 0; i< squares.size(); i++ ) {
+        if (i == square) {
+            cv::drawContours(image, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
+            
+            // draw bounding rect
+            cv::Rect rect = boundingRect(cv::Mat(squares[i]));
+            //cv::rectangle(image, rect.tl(), rect.br(), cv::Scalar(0,255,0), 2, 8, 0);
+            
+            // draw rotated rect
+            cv::RotatedRect minRect = minAreaRect(cv::Mat(squares[i]));
+            cv::Point2f rect_points[4];
+            minRect.points( rect_points );
+            for ( int j = 0; j < 4; j++ ) {
+                //cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
+            }
         }
     }
     
@@ -87,7 +152,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
         mixChannels(&blurred, 1, &gray0, 1, ch, 1);
 
         // try several threshold levels
-        const int threshold_level = 8;
+        const int threshold_level = 10;
         for (int l = 0; l < threshold_level; l++)
         {
             //std::cout<<">>Treshold at "<<l<<"\n";
@@ -108,7 +173,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
             // Find contours and store them in a list
             findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
             
-            std::cout<<contours.size() << " contours found \n";
+            //std::cout<<contours.size() << " contours found \n";
             // Test contours
             vector<Point> approx;
             for (size_t i = 0; i < contours.size(); i++)
