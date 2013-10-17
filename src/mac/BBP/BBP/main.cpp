@@ -27,33 +27,40 @@ IplImage *imageObject;
 const char* window = "Source image";
 const char* window2 = "Destination image";
 std::vector<std::vector<cv::Point>> squares;
-int indexOfSquare = 0;
 std::vector<cv::Point2f> squareTransformSource;
 std::vector<cv::Point2f> squareTransformDestination;
+int indexOfSquare = 0;
+float areaUpperLimit = 0;
+float areaLowerLimit = 0;
 
 
-void on_trackbar( int, void* )
-{
-    Mat srcCopy = src.clone();
-    debugSquares(squares, srcCopy, indexOfSquare);
-    imshow( window, srcCopy );
-    
+void create_destination_image(){
     if (squares.size() > 0) {
         squareTransformSource.clear();
-        std::cout<<squares[indexOfSquare]<<"\n";
         for(std::vector<cv::Point>::iterator it = squares[indexOfSquare].begin(); it != squares[indexOfSquare].end(); ++it) {
             squareTransformSource.push_back(cvPointTo32f(*it));
         }
-        
-        Mat src2;
-        transpose(src,src2);
-        cv::flip(src2, src2, 1);
         Mat transform = getPerspectiveTransform(squareTransformSource, squareTransformDestination);
         cv::warpPerspective(src, crop, transform, cvSize(imageObject->width, imageObject->height));
-        
+        transform.release();
+        imshow(window2, crop);
     }
+}
+
+void create_source_image(){
+    Mat srcCopy = src.clone();
+    debugSquares(squares, srcCopy, indexOfSquare);
+    imshow( window, srcCopy );
+    srcCopy.release();
+
+}
+
+void on_trackbar( int, void* )
+{
+
+    create_source_image();
+    create_destination_image();
     
-    imshow(window2, crop);
 }
 
 
@@ -72,14 +79,16 @@ int main( int, char** argv )
     squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
     namedWindow( window, CV_WINDOW_AUTOSIZE );
     namedWindow( window2, CV_WINDOW_AUTOSIZE);
-    
+    indexOfSquare = 0;
+    areaLowerLimit = 0.1;
+    areaUpperLimit = 0.95;
     
     cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
-
     find_squares(proc, squares);
-    createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
     
-    imshow(window, src );
+    createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
+    create_source_image();
+    create_destination_image();
     
     waitKey(0);
     return(0);
@@ -112,6 +121,8 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 
 void find_squares(Mat& image, vector<vector<Point> >& squares)
 {
+    squares.clear();
+    
     // blur will enhance edge detection
     Mat blurred(image);
     medianBlur(image, blurred, 9);
@@ -158,8 +169,9 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
                 // Note: absolute value of an area is used because
                 // area may be positive or negative - in accordance with the
                 // contour orientation
+                int area = fabs(contourArea(Mat(approx)));
                 if (approx.size() == 4 &&
-                    fabs(contourArea(Mat(approx))) > 1000 &&
+                    area > 1000 &&
                     isContourConvex(Mat(approx)))
                 {
                     double maxCosine = 0;
@@ -170,8 +182,17 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
                         maxCosine = MAX(maxCosine, cosine);
                     }
                     
-                    if (maxCosine < 0.3)
-                        squares.push_back(approx);
+                    if (maxCosine < 0.3){
+                        float ratio = ((float)area/(imageObject->width*imageObject->height));
+                        std::cout<<"square with area of "<< area << "px (" <<  ratio  << " %)"<<" found! ";
+                        if (ratio < areaUpperLimit && ratio > areaLowerLimit) {
+                            squares.push_back(approx);
+                            std::cout<<" -> added.\n";
+                        }
+                        else{
+                            std::cout<<" -> discarded.\n";
+                        }
+                    }
                 }
             }
         }
