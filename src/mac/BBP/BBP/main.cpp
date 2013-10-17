@@ -22,10 +22,13 @@ void find_squares(Mat& image, vector<vector<Point> >& squares);
 
 /// Global variables
 Mat src, proc, crop;
+IplImage *imageObject;
 const char* window = "Source image";
 const char* window2 = "Destination image";
 std::vector<std::vector<cv::Point>> squares;
 int indexOfSquare = 0;
+std::vector<cv::Point2f> squareTransformSource;
+std::vector<cv::Point2f> squareTransformDestination;
 
 
 void on_trackbar( int, void* )
@@ -33,6 +36,22 @@ void on_trackbar( int, void* )
     Mat srcCopy = src.clone();
     debugSquares(squares, srcCopy, indexOfSquare);
     imshow( window, srcCopy );
+    
+    if (squares.size() > 0) {
+        squareTransformSource.clear();
+        std::cout<<squares[indexOfSquare]<<"\n";
+        for(std::vector<cv::Point>::iterator it = squares[indexOfSquare].begin(); it != squares[indexOfSquare].end(); ++it) {
+            squareTransformSource.push_back(cvPointTo32f(*it));
+        }
+        
+        Mat src2;
+        transpose(src,src2);
+        cv::flip(src2, src2, 1);
+        Mat transform = getPerspectiveTransform(squareTransformSource, squareTransformDestination);
+        cv::warpPerspective(src, crop, transform, cvSize(imageObject->width, imageObject->height));
+        
+    }
+    
     imshow(window2, crop);
 }
 
@@ -43,40 +62,23 @@ void on_trackbar( int, void* )
 int main( int, char** argv )
 {
     /// Load source image and convert it to gray
-    IplImage *imageObject = cvLoadImage( argv[1]);
-    cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
-    
-    
+    imageObject = cvLoadImage( argv[1]);
     src = imread( argv[1], 1 );
     proc = imread(argv[1], 1 );
-    std::vector<cv::Point2f> squareTransformSource;
-    std::vector<cv::Point2f> squareTransformDestination;
     squareTransformDestination.push_back(Point2f(0.0,0.0));
     squareTransformDestination.push_back(Point2f(imageObject->width,0.0));
     squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
     squareTransformDestination.push_back(Point2f(imageObject->width,imageObject->height));
     namedWindow( window, CV_WINDOW_AUTOSIZE );
     namedWindow( window2, CV_WINDOW_AUTOSIZE);
+    
+    
+    cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
+
     find_squares(proc, squares);
     createTrackbar("square", window, &indexOfSquare, squares.size(), on_trackbar,0);
-
-    
-    if (squares.size() > 0) {
-        std::cout<<squares[indexOfSquare]<<"\n";
-        for(std::vector<cv::Point>::iterator it = squares[indexOfSquare].begin(); it != squares[indexOfSquare].end(); ++it) {
-            squareTransformSource.push_back(cvPointTo32f(*it));
-        }
-
-        Mat src2;
-        transpose(src,src2);
-        cv::flip(src2, src2, 1);
-        Mat transform = getPerspectiveTransform(squareTransformSource, squareTransformDestination);
-        cv::warpPerspective(src, crop, transform, cvSize(imageObject->width, imageObject->height));
-        
-    }
     
     imshow(window, src );
-    imshow(window2, crop);
     
     waitKey(0);
     return(0);
@@ -203,5 +205,5 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
             }
         }
     }
-    std::cout<< squares.size() << " squares found!";
+    std::cout<< squares.size() << " squares found!\n";
 }
