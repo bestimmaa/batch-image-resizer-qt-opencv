@@ -16,6 +16,7 @@
 		2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FB8B046180D89CF00EDC8E9 /* BBP.1 */; };
 		2FDA4988180F12C50074A6DC /* square.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FDA4987180F12C10074A6DC /* square.jpg */; };
 		2FDA498A180F549F0074A6DC /* libopencv_calib3d.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDA4989180F54920074A6DC /* libopencv_calib3d.dylib */; };
+		2FE33A1C18105D010096492F /* book1.jpg in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2FE33A1B18105CE60096492F /* book1.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 16;
 			files = (
+				2FE33A1C18105D010096492F /* book1.jpg in CopyFiles */,
 				2FB8B047180D89CF00EDC8E9 /* BBP.1 in CopyFiles */,
 				2F78A0C9180ECF960075839D /* postit_flash.jpg in CopyFiles */,
 				2FDA4988180F12C50074A6DC /* square.jpg in CopyFiles */,
@@ -45,6 +47,7 @@
 		2FB8B046180D89CF00EDC8E9 /* BBP.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BBP.1; sourceTree = "<group>"; };
 		2FDA4987180F12C10074A6DC /* square.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square.jpg; sourceTree = "<group>"; };
 		2FDA4989180F54920074A6DC /* libopencv_calib3d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_calib3d.dylib; sourceTree = "<group>"; };
+		2FE33A1B18105CE60096492F /* book1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = book1.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +96,7 @@
 		2FB8B043180D89CF00EDC8E9 /* BBP */ = {
 			isa = PBXGroup;
 			children = (
+				2FE33A1B18105CE60096492F /* book1.jpg */,
 				2FDA4987180F12C10074A6DC /* square.jpg */,
 				2F78A0C7180ECF900075839D /* postit_flash.jpg */,
 				2F78A0C8180ECF900075839D /* postit_noflash.jpg */,

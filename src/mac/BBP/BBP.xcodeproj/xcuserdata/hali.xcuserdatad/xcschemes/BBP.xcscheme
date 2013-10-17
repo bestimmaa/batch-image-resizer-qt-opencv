@@ -59,7 +59,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "postit_flash.jpg"
+            argument = "book1.jpg"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

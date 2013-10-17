@@ -1,8 +1,5 @@
-/**
- * @function cornerDetector_Demo.cpp
- * @brief Demo code for detecting corners using OpenCV built-in functions
- * @author OpenCV team
- */
+#include "mainwindow.h"
+#include <QApplication>
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core.hpp"
@@ -26,7 +23,7 @@ Mat src, proc, crop;
 IplImage *imageObject;
 const char* window = "Source image";
 const char* window2 = "Destination image";
-std::vector<std::vector<cv::Point>> squares;
+std::vector<std::vector<cv::Point> > squares;
 std::vector<cv::Point2f> squareTransformSource;
 std::vector<cv::Point2f> squareTransformDestination;
 int indexOfSquare = 0;
@@ -87,21 +84,21 @@ int main( int, char** argv )
     areaLowerLimit = 0.1;
     areaUpperLimit = 0.95;
     treshold = 10;
-    
+
     cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
     find_squares(proc, squares, treshold);
-    
+
     createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
     create_source_image();
     create_destination_image();
-    
+
     waitKey(0);
     return(0);
 }
 
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square )
 {
-    
+
     for ( int i = 0; i< squares.size(); i++ ) {
         if (i == square) {
             cv::drawContours(image, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
@@ -112,7 +109,7 @@ cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat imag
             }
         }
     }
-    
+
     return image;
 }
 
@@ -127,13 +124,13 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
 {
     squares.clear();
-    
+
     // blur will enhance edge detection
     Mat blurred(image);
     medianBlur(image, blurred, 9);
     Mat gray0(blurred.size(), CV_8U), gray;
     vector<vector<Point> > contours;
-    
+
     // find squares in every color plane of the image
     for (int c = 0; c < 3; c++)
     {
@@ -145,7 +142,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
         for (int l = 0; l < threshold_level; l++)
         {
             //std::cout<<">>Treshold at "<<l<<"\n";
-            
+
             // Use Canny instead of zero threshold level!
             // Canny helps to catch squares with gradient shading
             if (l == 0)
@@ -161,7 +158,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
 
             // Find contours and store them in a list
             findContours(gray, contours, CV_RETR_LIST, CV_CHAIN_APPROX_SIMPLE);
-            
+
             //std::cout<<contours.size() << " contours found \n";
             // Test contours
             vector<Point> approx;
@@ -170,7 +167,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
                 // approximate contour with accuracy proportional
                 // to the contour perimeter
                 approxPolyDP(Mat(contours[i]), approx, arcLength(Mat(contours[i]), true)*0.02, true);
-                
+
                 // Note: absolute value of an area is used because
                 // area may be positive or negative - in accordance with the
                 // contour orientation
@@ -180,13 +177,13 @@ void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
                     isContourConvex(Mat(approx)))
                 {
                     double maxCosine = 0;
-                    
+
                     for (int j = 2; j < 5; j++)
                     {
                         double cosine = fabs(angle(approx[j%4], approx[j-2], approx[j-1]));
                         maxCosine = MAX(maxCosine, cosine);
                     }
-                    
+
                     if (maxCosine < 0.3){
                         float ratio = ((float)area/(imageObject->width*imageObject->height));
                         std::cout<<"square with area of "<< area << "px (" <<  ratio  << " %)"<<" found! ";
