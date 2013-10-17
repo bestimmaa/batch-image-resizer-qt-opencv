@@ -44,7 +44,7 @@
 		2FB8B044180D89CF00EDC8E9 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2FB8B046180D89CF00EDC8E9 /* BBP.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = BBP.1; sourceTree = "<group>"; };
 		2FDA4987180F12C10074A6DC /* square.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = square.jpg; sourceTree = "<group>"; };
-		2FDA4989180F54920074A6DC /* libopencv_calib3d.dylib */ = {isa = PBXFileReference; lastKnownFileType = file; path = libopencv_calib3d.dylib; sourceTree = "<group>"; };
+		2FDA4989180F54920074A6DC /* libopencv_calib3d.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_calib3d.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -232,7 +232,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
-				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -250,7 +250,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LIBRARY = "libstdc++";
-				FRAMEWORK_SEARCH_PATHS = /usr/local/lib;
+				FRAMEWORK_SEARCH_PATHS = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
