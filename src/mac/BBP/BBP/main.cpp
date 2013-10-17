@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <string.h>
 
 using namespace cv;
 using namespace std;
@@ -67,8 +68,8 @@ int main( int, char** argv )
     proc = imread(argv[1], 1 );
     squareTransformDestination.push_back(Point2f(0.0,0.0));
     squareTransformDestination.push_back(Point2f(imageObject->width,0.0));
-    squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
     squareTransformDestination.push_back(Point2f(imageObject->width,imageObject->height));
+    squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
     namedWindow( window, CV_WINDOW_AUTOSIZE );
     namedWindow( window2, CV_WINDOW_AUTOSIZE);
     
@@ -76,35 +77,12 @@ int main( int, char** argv )
     cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
 
     find_squares(proc, squares);
-    createTrackbar("square", window, &indexOfSquare, squares.size(), on_trackbar,0);
+    createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
     
     imshow(window, src );
     
     waitKey(0);
     return(0);
-}
-
-cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image )
-{
-    
-    for ( int i = 0; i< squares.size(); i++ ) {
-        // draw contour
-        cv::drawContours(image, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
-        
-        // draw bounding rect
-        cv::Rect rect = boundingRect(cv::Mat(squares[i]));
-        //cv::rectangle(image, rect.tl(), rect.br(), cv::Scalar(0,255,0), 2, 8, 0);
-        
-        // draw rotated rect
-        cv::RotatedRect minRect = minAreaRect(cv::Mat(squares[i]));
-        cv::Point2f rect_points[4];
-        minRect.points( rect_points );
-        for ( int j = 0; j < 4; j++ ) {
-            //cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
-        }
-    }
-    
-    return image;
 }
 
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square )
@@ -113,17 +91,10 @@ cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat imag
     for ( int i = 0; i< squares.size(); i++ ) {
         if (i == square) {
             cv::drawContours(image, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
-            
-            // draw bounding rect
-            cv::Rect rect = boundingRect(cv::Mat(squares[i]));
-            //cv::rectangle(image, rect.tl(), rect.br(), cv::Scalar(0,255,0), 2, 8, 0);
-            
-            // draw rotated rect
-            cv::RotatedRect minRect = minAreaRect(cv::Mat(squares[i]));
-            cv::Point2f rect_points[4];
-            minRect.points( rect_points );
-            for ( int j = 0; j < 4; j++ ) {
-                //cv::line( image, rect_points[j], rect_points[(j+1)%4], cv::Scalar(0,0,255), 1, 8 ); // blue
+            for (int j = 0; j < 4; ++j) {
+                string Result;
+                ostringstream convert; convert << j;
+                putText(image, convert.str(), squares[i][j], 0, 1, 1.0);
             }
         }
     }
