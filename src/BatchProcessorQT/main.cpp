@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
+#include <QTextEdit>
+
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core.hpp"
@@ -41,14 +43,14 @@ void create_destination_image(){
         Mat transform = getPerspectiveTransform(squareTransformSource, squareTransformDestination);
         cv::warpPerspective(src, crop, transform, cvSize(imageObject->width, imageObject->height));
         transform.release();
-        imshow(window2, crop);
+        //imshow(window2, crop);
     }
 }
 
 void create_source_image(){
     Mat srcCopy = src.clone();
     debugSquares(squares, srcCopy, indexOfSquare);
-    imshow( window, srcCopy );
+    //imshow( window, srcCopy );
     srcCopy.release();
 
 }
@@ -68,8 +70,13 @@ void on_trackbar( int, void* )
 /**
  * @function main
  */
-int main( int, char** argv )
+int main( int args, char** argv )
 {
+    QApplication app(args, argv);
+    QTextEdit textEdit;
+    textEdit.show();
+
+
     /// Load source image and convert it to gray
     imageObject = cvLoadImage( argv[1]);
     src = imread( argv[1], 1 );
@@ -78,8 +85,8 @@ int main( int, char** argv )
     squareTransformDestination.push_back(Point2f(imageObject->width,0.0));
     squareTransformDestination.push_back(Point2f(imageObject->width,imageObject->height));
     squareTransformDestination.push_back(Point2f(0.0,imageObject->height));
-    namedWindow( window, CV_WINDOW_AUTOSIZE );
-    namedWindow( window2, CV_WINDOW_AUTOSIZE);
+    //namedWindow( window, CV_WINDOW_AUTOSIZE );
+    //namedWindow( window2, CV_WINDOW_AUTOSIZE);
     indexOfSquare = 0;
     areaLowerLimit = 0.1;
     areaUpperLimit = 0.95;
@@ -88,12 +95,11 @@ int main( int, char** argv )
     cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
     find_squares(proc, squares, treshold);
 
-    createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
-    create_source_image();
-    create_destination_image();
+    //createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
+    //create_source_image();
+    //create_destination_image();
 
-    waitKey(0);
-    return(0);
+    return app.exec();
 }
 
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square )

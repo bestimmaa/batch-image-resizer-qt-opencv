@@ -21,3 +21,4 @@ src/mac/BBP/Build
 src/mac/BBP/DerivedData
 src/build-BatchProcessorQT-Desktop_Qt_5_1_1_clang_64bit-Debug/Makefile
 src/build-BatchProcessorQT-Desktop_Qt_5_1_1_clang_64bit-Debug/Test.app/Contents/MacOS/Test
+src/build-BatchProcessorQT-Desktop_Qt_5_1_1_clang_64bit-Debug
