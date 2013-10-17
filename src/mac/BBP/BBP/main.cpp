@@ -19,7 +19,7 @@ using namespace std;
 
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image );
 cv::Mat debugSquares( std::vector<std::vector<cv::Point> > squares, cv::Mat image, int square );
-void find_squares(Mat& image, vector<vector<Point> >& squares);
+void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold);
 
 /// Global variables
 Mat src, proc, crop;
@@ -30,6 +30,7 @@ std::vector<std::vector<cv::Point>> squares;
 std::vector<cv::Point2f> squareTransformSource;
 std::vector<cv::Point2f> squareTransformDestination;
 int indexOfSquare = 0;
+int treshold = 2;
 float areaUpperLimit = 0;
 float areaLowerLimit = 0;
 
@@ -55,13 +56,16 @@ void create_source_image(){
 
 }
 
-void on_trackbar( int, void* )
-{
-
+void updateUI(){
     create_source_image();
     create_destination_image();
-    
 }
+
+void on_trackbar( int, void* )
+{
+    updateUI();
+}
+
 
 
 /**
@@ -82,9 +86,10 @@ int main( int, char** argv )
     indexOfSquare = 0;
     areaLowerLimit = 0.1;
     areaUpperLimit = 0.95;
+    treshold = 10;
     
     cout<<"Image loaded with "<<imageObject->width<<" x "<<imageObject->height<<" pixel\n";
-    find_squares(proc, squares);
+    find_squares(proc, squares, treshold);
     
     createTrackbar("square", window, &indexOfSquare, (int)squares.size()-1, on_trackbar,0);
     create_source_image();
@@ -119,7 +124,7 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
     return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10);
 }
 
-void find_squares(Mat& image, vector<vector<Point> >& squares)
+void find_squares(Mat& image, vector<vector<Point> >& squares, int treshold)
 {
     squares.clear();
     
@@ -136,7 +141,7 @@ void find_squares(Mat& image, vector<vector<Point> >& squares)
         mixChannels(&blurred, 1, &gray0, 1, ch, 1);
 
         // try several threshold levels
-        const int threshold_level = 10;
+        const int threshold_level = treshold;
         for (int l = 0; l < threshold_level; l++)
         {
             //std::cout<<">>Treshold at "<<l<<"\n";
