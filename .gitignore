@@ -19,3 +19,5 @@ src/mac/BBP/DerivedData/BBP/Logs/Issues/Cache.db
 src/mac/BBP/DerivedData/BBP/Logs/Issues/D9496B3F-9D22-408D-87E4-06B480836D92.xcactivitylog
 src/mac/BBP/Build
 src/mac/BBP/DerivedData
+src/build-BatchProcessorQT-Desktop_Qt_5_1_1_clang_64bit-Debug/Makefile
+src/build-BatchProcessorQT-Desktop_Qt_5_1_1_clang_64bit-Debug/Test.app/Contents/MacOS/Test
