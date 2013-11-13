@@ -98,6 +98,7 @@ int main( int args, char** argv )
     create_source_image();
     create_destination_image();
 
+    waitKey(0);
     return 0;
 }
 
