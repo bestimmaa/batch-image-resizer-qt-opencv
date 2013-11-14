@@ -21,6 +21,9 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
 
+private slots:
+    void didSelectFolder(QModelIndex index);
+
 };
 
 #endif // MAINWINDOW_H
