@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QFileSystemModel>
+#include <QFuture>
+#include <QtCore>
 
 namespace Ui {
 class MainWindow;
@@ -20,11 +22,13 @@ public:
 private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
-    void scanDir(const QString &path);
+    QFuture<void> fileLoadingFuture;
+    QFutureWatcher<void> fileLoadingWatcher;
 
 private slots:
     void didSelectFolder(QModelIndex index);
     void didPressConvertButton();
+    void loadingFilesDidFinish();
 
 };
 
