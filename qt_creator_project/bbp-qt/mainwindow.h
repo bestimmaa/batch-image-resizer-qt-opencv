@@ -24,10 +24,14 @@ private:
     QFileSystemModel model;
     QFuture<void> fileLoadingFuture;
     QFutureWatcher<void> fileLoadingWatcher;
+    bool loadingActive;
+    void updateUI();
+    void setLoadingIsActive(bool);
 
 private slots:
     void didSelectFolder(QModelIndex index);
     void didPressConvertButton();
+    void didPressCancelButton();
     void loadingFilesDidFinish();
 
 };
