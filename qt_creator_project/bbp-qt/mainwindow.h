@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QFileSystemModel>
 
 namespace Ui {
 class MainWindow;
@@ -18,7 +19,8 @@ public:
     
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    QFileSystemModel model;
+
 };
 
 #endif // MAINWINDOW_H
