@@ -34,7 +34,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Select Directory:</string>
+     <string>Select File / Directory:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="buttonConvert">

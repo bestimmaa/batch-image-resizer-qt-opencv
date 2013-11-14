@@ -18,3 +18,7 @@ HEADERS  += mainwindow.h \
     qtopencvhelper.h
 
 FORMS    += mainwindow.ui
+
+LIBS += -lboost_filesystem
+LIBS += -lboost_system
+

@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <QString>
 #include <QDebug>
+#include <boost/filesystem.hpp>
 
 using namespace std;
 
@@ -30,10 +31,22 @@ void MainWindow::didSelectFolder(QModelIndex index){
     QString path = fileModel->filePath(index);
     bool selectionIsDir = fileModel->isDir(index);
     qDebug()<<"path selected in file browser: "<<path;
-    if(isDir){
+    if(selectionIsDir){
+        QDir dir = QDir(path);
+        QDirIterator iterator(dir.absolutePath());
+        while(iterator.hasNext()){
+            QString filename = iterator.fileName();
+            if(filename.endsWith(".jpg")){
+                qDebug("%s",qPrintable(iterator.filePath()));
+            };
+            iterator.next();
+        }
+    }
+    else{
 
     }
-    // handle file / directory selection
+
+
 }
 
 void MainWindow::didPressConvertButton(){
