@@ -6,6 +6,7 @@
 #include <QFileSystemModel>
 #include <QFuture>
 #include <QtCore>
+#include "sourceimagesmodel.h"
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
+    SourceImagesModel sourceImages;
     QFuture<void> fileLoadingFuture;
     QFutureWatcher<void> fileLoadingWatcher;
     bool loadingActive;

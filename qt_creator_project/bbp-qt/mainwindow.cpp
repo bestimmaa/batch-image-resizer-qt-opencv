@@ -6,7 +6,7 @@
 #include <QString>
 #include <QDebug>
 
-#define MAX_DEPTH 5
+#define MAX_DEPTH 150
 
 using namespace std;
 extern bool scanningStopped = false;
@@ -34,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     model.setRootPath("");
     ui->dirSelector->setModel(&model);
+    ui->imagesList->setModel(&sourceImages);
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
@@ -80,6 +81,7 @@ void MainWindow::loadingFilesDidFinish(){
 }
 
 void MainWindow::updateUI(){
+    this->ui->imagesList->show();
     if(this->loadingActive){
         this->ui->dirSelector->setEnabled(false);
         this->ui->progressBarLoadingFiles->show();

@@ -43,8 +43,8 @@
    <widget class="QPushButton" name="buttonConvert">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>560</y>
+      <x>710</x>
+      <y>310</y>
       <width>111</width>
       <height>27</height>
      </rect>
@@ -80,6 +80,16 @@
     </property>
     <property name="text">
      <string>Cancel</string>
+    </property>
+   </widget>
+   <widget class="QListView" name="imagesList">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>50</y>
+      <width>256</width>
+      <height>541</height>
+     </rect>
     </property>
    </widget>
   </widget>

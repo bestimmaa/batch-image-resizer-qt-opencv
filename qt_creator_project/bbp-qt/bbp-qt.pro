@@ -12,10 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    qtopencvhelper.cpp
+    qtopencvhelper.cpp \
+    sourceimagesmodel.cpp
 
 HEADERS  += mainwindow.h \
-    qtopencvhelper.h
+    qtopencvhelper.h \
+    sourceimagesmodel.h
 
 FORMS    += mainwindow.ui
 
