@@ -37,17 +37,17 @@
      <string>Select Directory:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="buttonConvert">
     <property name="geometry">
      <rect>
       <x>550</x>
-      <y>280</y>
+      <y>560</y>
       <width>111</width>
       <height>27</height>
      </rect>
     </property>
     <property name="text">
-     <string>Batch Convert</string>
+     <string>Convert Files</string>
     </property>
    </widget>
   </widget>

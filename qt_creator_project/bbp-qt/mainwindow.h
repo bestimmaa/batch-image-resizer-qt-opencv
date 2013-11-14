@@ -23,6 +23,7 @@ private:
 
 private slots:
     void didSelectFolder(QModelIndex index);
+    void didPressConvertButton();
 
 };
 
