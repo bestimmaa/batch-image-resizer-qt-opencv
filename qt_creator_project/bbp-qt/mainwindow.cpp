@@ -29,22 +29,8 @@ MainWindow::~MainWindow()
 void MainWindow::didSelectFolder(QModelIndex index){
     QFileSystemModel *fileModel = (QFileSystemModel*) ui->dirSelector->model();
     QString path = fileModel->filePath(index);
-    bool selectionIsDir = fileModel->isDir(index);
     qDebug()<<"path selected in file browser: "<<path;
-    if(selectionIsDir){
-        QDir dir = QDir(path);
-        QDirIterator iterator(dir.absolutePath());
-        while(iterator.hasNext()){
-            QString filename = iterator.fileName();
-            if(filename.endsWith(".jpg")){
-                qDebug("%s",qPrintable(iterator.filePath()));
-            };
-            iterator.next();
-        }
-    }
-    else{
-
-    }
+    this->scanDir(path);
 
 
 }
@@ -52,3 +38,18 @@ void MainWindow::didSelectFolder(QModelIndex index){
 void MainWindow::didPressConvertButton(){
     qDebug()<<"button convert pressed";
 }
+
+void MainWindow::scanDir(const QString &path){
+    QFileInfo info(path);
+    if(info.isDir()){
+        QDirIterator it(path);
+        while(it.hasNext()){
+            this->scanDir(it.filePath());
+            it.next();
+        }
+    }
+    else{
+        qDebug("%s",qPrintable(info.absoluteFilePath()));
+    }
+}
+

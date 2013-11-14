@@ -20,6 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
+    void scanDir(const QString &path);
 
 private slots:
     void didSelectFolder(QModelIndex index);
