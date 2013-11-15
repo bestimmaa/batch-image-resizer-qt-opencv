@@ -12,15 +12,19 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    qtopencvhelper.cpp \
-    sourceimagesmodel.cpp
+    sourceimagesmodel.cpp \
+    imageprocessor.cpp \
+    opencvhelper.cpp
 
 HEADERS  += mainwindow.h \
-    qtopencvhelper.h \
-    sourceimagesmodel.h
+    sourceimagesmodel.h \
+    imageprocessor.h \
+    opencvhelper.h
 
 FORMS    += mainwindow.ui
 
-LIBS += -lboost_filesystem
-LIBS += -lboost_system
+LIBS += -lopencv_core
+LIBS += -lopencv_imgproc
+LIBS += -lopencv_calib3d
+LIBS += -lopencv_highgui
 

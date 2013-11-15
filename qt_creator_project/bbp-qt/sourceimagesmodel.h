@@ -17,7 +17,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     void addPath(QString);
     void addFile(QFileInfo);
-    void addFiles(const std::vector<QFileInfo>& files);
+    void addFiles(const std::vector<QFileInfo>&files);
     void clear();
 signals:
 private:
