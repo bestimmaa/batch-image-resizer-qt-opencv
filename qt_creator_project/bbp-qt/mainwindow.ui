@@ -21,7 +21,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>50</y>
+      <y>20</y>
       <width>331</width>
       <height>541</height>
      </rect>
@@ -43,9 +43,9 @@
    <widget class="QPushButton" name="buttonConvert">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>310</y>
-      <width>111</width>
+      <x>370</x>
+      <y>570</y>
+      <width>261</width>
       <height>27</height>
      </rect>
     </property>
@@ -57,8 +57,8 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
-      <width>181</width>
+      <y>570</y>
+      <width>241</width>
       <height>23</height>
      </rect>
     </property>
@@ -72,9 +72,9 @@
    <widget class="QPushButton" name="buttonCancel">
     <property name="geometry">
      <rect>
-      <x>210</x>
-      <y>20</y>
-      <width>141</width>
+      <x>270</x>
+      <y>570</y>
+      <width>81</width>
       <height>27</height>
      </rect>
     </property>
@@ -85,8 +85,8 @@
    <widget class="QListView" name="imagesList">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>50</y>
+      <x>370</x>
+      <y>20</y>
       <width>256</width>
       <height>541</height>
      </rect>
