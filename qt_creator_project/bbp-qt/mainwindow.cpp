@@ -48,13 +48,14 @@ std::vector<QFileInfo> scanDir(const QString &path){
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    sourceImages(new SourceImagesModel),
     scanResults(new std::vector<QFileInfo>)
 
 {
     ui->setupUi(this);
     model.setRootPath("");
     ui->dirSelector->setModel(&model);
-    ui->imagesList->setModel(&sourceImages);
+    ui->imagesList->setModel(sourceImages);
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
@@ -101,8 +102,8 @@ void MainWindow::loadingFilesDidFinish(){
     std::vector<QFileInfo> result = fileLoadingFuture.result();
     qDebug()<<"Loading did finish with "<<result.size();
     setLoadingIsActive(false);
-    sourceImages.clear();
-    sourceImages.addFiles(result);
+    sourceImages->clear();
+    sourceImages->addFiles(result);
 }
 
 void MainWindow::updateUI(){

@@ -23,7 +23,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
-    SourceImagesModel sourceImages;
+    SourceImagesModel *sourceImages;
     QFuture<std::vector<QFileInfo> > fileLoadingFuture;
     QFutureWatcher<std::vector<QFileInfo> > fileLoadingWatcher;
     std::vector<QFileInfo> *scanResults;
