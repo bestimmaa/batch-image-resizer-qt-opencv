@@ -24,8 +24,9 @@ private:
     Ui::MainWindow *ui;
     QFileSystemModel model;
     SourceImagesModel sourceImages;
-    QFuture<void> fileLoadingFuture;
-    QFutureWatcher<void> fileLoadingWatcher;
+    QFuture<std::vector<QFileInfo> > fileLoadingFuture;
+    QFutureWatcher<std::vector<QFileInfo> > fileLoadingWatcher;
+    std::vector<QFileInfo> *scanResults;
     bool loadingActive;
     void updateUI();
     void setLoadingIsActive(bool);

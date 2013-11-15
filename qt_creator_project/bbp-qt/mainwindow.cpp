@@ -6,26 +6,26 @@
 #include <QString>
 #include <QDebug>
 
-#define MAX_DEPTH 100
 
 using namespace std;
-extern bool scanningStopped = false;
-extern void scanDir(QString path);
+bool scanningStopped = false;
+std::vector<QFileInfo> scanDir(const QString &path);
 
-extern bool checkFile(const QFileInfo &file){
+bool checkFile(const QFileInfo &file){
     if (file.fileName().endsWith(".jpg") || file.fileName().endsWith(".jpeg")){
         return true;
     }
     return false;
 }
 
-extern void scanDir(const QString &path, int depth, std::vector<QFileInfo> &results){
+std::vector<QFileInfo> scanDir(const QString &path){
+    std::vector<QFileInfo> results;
     QFileInfo info(path);
     if(info.isDir()){
         QDirIterator it(path,QDirIterator::Subdirectories);
         while(it.hasNext()){
             if(scanningStopped){
-                results.clear();
+               // results.clear();
                 break;
             }
             QFileInfo current = it.fileInfo();
@@ -41,11 +41,15 @@ extern void scanDir(const QString &path, int depth, std::vector<QFileInfo> &resu
             qDebug("%s",qPrintable(info.absoluteFilePath()));
             results.push_back(info);
     }
+
+    return results;
 }
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    scanResults(new std::vector<QFileInfo>)
+
 {
     ui->setupUi(this);
     model.setRootPath("");
@@ -56,29 +60,30 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
     this->setLoadingIsActive(false);
     this->updateUI();
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete scanResults;
 }
 
 void MainWindow::setLoadingIsActive(bool loading){
-    this->loadingActive = loading;
-    this->updateUI();
+    loadingActive = loading;
+    updateUI();
 }
 
 
 void MainWindow::didSelectFolder(QModelIndex index){
     QFileSystemModel *fileModel = (QFileSystemModel*) ui->dirSelector->model();
     QString path = fileModel->filePath(index);
-    std::vector<QFileInfo> files;
-    if(!this->fileLoadingFuture.isRunning()){
+    if(!fileLoadingFuture.isRunning()){
         qDebug()<<"starting scan for path"<<path;
         scanningStopped = false;
-        this->setLoadingIsActive(true);
-        this->fileLoadingFuture = QtConcurrent::run(scanDir,path,0,files);
-        this->fileLoadingWatcher.setFuture(this->fileLoadingFuture);
+        setLoadingIsActive(true);
+        fileLoadingFuture = QtConcurrent::run(scanDir,path);
+        fileLoadingWatcher.setFuture(this->fileLoadingFuture);
         connect(&this->fileLoadingWatcher,SIGNAL(finished()),this,SLOT(loadingFilesDidFinish()));
     }
 }
@@ -93,25 +98,26 @@ void MainWindow::didPressCancelButton(){
 }
 
 void MainWindow::loadingFilesDidFinish(){
-    qDebug("Loading did finish!");
-    this->setLoadingIsActive(false);
-    this->sourceImages.clear();
-    //sourceImages.addFiles();
+    std::vector<QFileInfo> result = fileLoadingFuture.result();
+    qDebug()<<"Loading did finish with "<<result.size();
+    setLoadingIsActive(false);
+    sourceImages.clear();
+    sourceImages.addFiles(result);
 }
 
 void MainWindow::updateUI(){
-    this->ui->imagesList->show();
-    if(this->loadingActive){
-        this->ui->dirSelector->setEnabled(false);
-        this->ui->progressBarLoadingFiles->show();
-        this->ui->buttonCancel->show();
-        this->ui->labelSelectFiles->setText("Loading files...");
+    ui->imagesList->show();
+    if(loadingActive){
+        ui->dirSelector->setEnabled(false);
+        ui->progressBarLoadingFiles->show();
+        ui->buttonCancel->show();
+        ui->labelSelectFiles->setText("Loading files...");
     }
     else{
-        this->ui->dirSelector->setEnabled(true);
-        this->ui->progressBarLoadingFiles->hide();
-        this->ui->buttonCancel->hide();
-        this->ui->labelSelectFiles->setText("Select directory or file:");
+        ui->dirSelector->setEnabled(true);
+        ui->progressBarLoadingFiles->hide();
+        ui->buttonCancel->hide();
+        ui->labelSelectFiles->setText("Select directory or file:");
 
     }
 }
