@@ -2,8 +2,9 @@
 #define SOURCEIMAGESMODEL_H
 
 #include <QAbstractItemModel>
-#include <vector>
 #include <QFileSystemModel>
+#include <QFileInfo>
+#include <vector>
 
 
 class SourceImagesModel : public QAbstractListModel
@@ -14,11 +15,12 @@ public:
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     void addPath(QString);
-    void addPath(QFileInfo);
+    void addFile(QFileInfo);
+    void addFiles(std::vector<QFileInfo> files);
     void clear();
 signals:
 private:
-    std::vector<QString> imagePaths;
+    std::vector<QFileInfo> imagePaths;
 
 public slots:
     

@@ -6,24 +6,40 @@
 #include <QString>
 #include <QDebug>
 
-#define MAX_DEPTH 150
+#define MAX_DEPTH 100
 
 using namespace std;
 extern bool scanningStopped = false;
 extern void scanDir(QString path);
 
-extern void scanDir(QString path, int depth){
+extern bool checkFile(const QFileInfo &file){
+    if (file.fileName().endsWith(".jpg") || file.fileName().endsWith(".jpeg")){
+        return true;
+    }
+    return false;
+}
+
+extern void scanDir(const QString &path, int depth, std::vector<QFileInfo> &results){
     QFileInfo info(path);
     if(info.isDir()){
-        QDirIterator it(path);
+        QDirIterator it(path,QDirIterator::Subdirectories);
         while(it.hasNext()){
-            if(scanningStopped) break;
-            if(depth < MAX_DEPTH)scanDir(it.filePath(),depth+1);
+            if(scanningStopped){
+                results.clear();
+                break;
+            }
+            QFileInfo current = it.fileInfo();
+            if(current.isFile() && checkFile(current)){
+                qDebug("%s",qPrintable(current.absoluteFilePath()));
+                results.push_back(current);
+            }
             it.next();
         }
     }
     else{
-        qDebug("%s",qPrintable(info.absoluteFilePath()));
+        if (checkFile(info))
+            qDebug("%s",qPrintable(info.absoluteFilePath()));
+            results.push_back(info);
     }
 }
 
@@ -56,11 +72,12 @@ void MainWindow::setLoadingIsActive(bool loading){
 void MainWindow::didSelectFolder(QModelIndex index){
     QFileSystemModel *fileModel = (QFileSystemModel*) ui->dirSelector->model();
     QString path = fileModel->filePath(index);
+    std::vector<QFileInfo> files;
     if(!this->fileLoadingFuture.isRunning()){
         qDebug()<<"starting scan for path"<<path;
         scanningStopped = false;
         this->setLoadingIsActive(true);
-        this->fileLoadingFuture = QtConcurrent::run(scanDir,path,0);
+        this->fileLoadingFuture = QtConcurrent::run(scanDir,path,0,files);
         this->fileLoadingWatcher.setFuture(this->fileLoadingFuture);
         connect(&this->fileLoadingWatcher,SIGNAL(finished()),this,SLOT(loadingFilesDidFinish()));
     }
@@ -78,6 +95,8 @@ void MainWindow::didPressCancelButton(){
 void MainWindow::loadingFilesDidFinish(){
     qDebug("Loading did finish!");
     this->setLoadingIsActive(false);
+    this->sourceImages.clear();
+    //sourceImages.addFiles();
 }
 
 void MainWindow::updateUI(){
