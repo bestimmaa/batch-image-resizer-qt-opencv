@@ -15,6 +15,7 @@ public:
     ~SourceImagesModel();
     int rowCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;
+    QFileInfo getFile(int row);
     void addPath(QString);
     void addFile(QFileInfo);
     void addFiles(const std::vector<QFileInfo>&files);

@@ -5,7 +5,9 @@
 #include <assert.h>
 #include <QString>
 #include <QDebug>
+#include <QGraphicsPixmapItem>
 #include <outputdirdialog.h>
+#include <QFileInfo>
 
 using namespace std;
 bool scanningStopped = false;
@@ -48,25 +50,39 @@ std::vector<QFileInfo> scanDir(const QString &path){
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    sourceImages(new SourceImagesModel),
+    imagesModel(new SourceImagesModel),
     scanResults(new std::vector<QFileInfo>)
 {
+    ui->setupUi(this);
+
+    // Settings
     QCoreApplication::setOrganizationName("Bauhaus University Weimar");
     QCoreApplication::setOrganizationDomain("uni-weimar.de");
     QCoreApplication::setApplicationName("Batch Image Processor");
+    settings = new QSettings();
 
-    ui->setupUi(this);
+    // File tree
+    model.setRootPath("");
     ui->dirSelector->setModel(&model);
-    ui->imagesList->setModel(sourceImages);
+
+    // Images list
+    ui->imagesList->setModel(imagesModel);
+
+    // Preview
+    previewScene = new QGraphicsScene(ui->imagePreview);
+    previewPixmapItem = new QGraphicsPixmapItem();
+    previewScene->addItem(previewPixmapItem);
+    ui->imagePreview->setScene(previewScene);
+
+    // Output dir dialog
     dialog = new OutputDirDialog(this);
 
+    // Connect signals and slots
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
     connect(ui->buttonOutput,SIGNAL(clicked()),this,SLOT(didPressOutputButton()));
-
-    model.setRootPath("");
-    settings = new QSettings();
+    connect(ui->imagesList,SIGNAL(clicked(QModelIndex)),this,SLOT(didSelectImage(QModelIndex)));
     setLoadingIsActive(false);
     updateUI();
 }
@@ -98,6 +114,11 @@ void MainWindow::didSelectFolder(QModelIndex index){
     }
 }
 
+void MainWindow::didSelectImage(QModelIndex index){
+    QFileInfo file = imagesModel->getFile(index.row());
+    qDebug()<<file.absoluteFilePath();
+    configurePreview(file.absoluteFilePath());
+}
 void MainWindow::didPressConvertButton(){
     qDebug()<<"button convert pressed";
 }
@@ -111,8 +132,8 @@ void MainWindow::loadingFilesDidFinish(){
     std::vector<QFileInfo> result = fileLoadingFuture.result();
     qDebug()<<"Loading did finish with "<<result.size();
     setLoadingIsActive(false);
-    sourceImages->clear();
-    sourceImages->addFiles(result);
+    imagesModel->clear();
+    imagesModel->addFiles(result);
 }
 
 void MainWindow::updateUI(){
@@ -143,4 +164,9 @@ void MainWindow::updateUI(){
 
 void MainWindow::didPressOutputButton(){
     dialog->show();
+}
+void MainWindow::configurePreview(QString path){
+    previewPixmap = new QPixmap(path);
+    previewPixmapItem->setPixmap(*previewPixmap);
+    ui->imagePreview->show();
 }

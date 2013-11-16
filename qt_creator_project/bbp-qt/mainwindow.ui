@@ -89,7 +89,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QGraphicsView" name="graphicsView"/>
+        <widget class="QGraphicsView" name="imagePreview"/>
        </item>
        <item>
         <widget class="QLabel" name="labelOutput">

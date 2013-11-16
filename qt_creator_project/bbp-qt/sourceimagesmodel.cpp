@@ -52,3 +52,8 @@ void SourceImagesModel::clear(){
     endResetModel();
 }
 
+QFileInfo SourceImagesModel::getFile(int row){
+    return imagePaths->operator [](row);
+}
+
+

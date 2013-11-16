@@ -28,15 +28,20 @@ private:
     Ui::MainWindow *ui;
     OutputDirDialog* dialog;
     QFileSystemModel model;
-    SourceImagesModel *sourceImages;
+    SourceImagesModel *imagesModel;
     QFuture<std::vector<QFileInfo> > fileLoadingFuture;
     QFutureWatcher<std::vector<QFileInfo> > fileLoadingWatcher;
     std::vector<QFileInfo> *scanResults;
+    QGraphicsScene* previewScene;
+    QGraphicsPixmapItem* previewPixmapItem;
+    QPixmap* previewPixmap;
     bool loadingActive;
     void setLoadingIsActive(bool);
+    void configurePreview(QString path);
 
 private slots:
     void didSelectFolder(QModelIndex index);
+    void didSelectImage(QModelIndex index);
     void didPressConvertButton();
     void didPressCancelButton();
     void loadingFilesDidFinish();
