@@ -7,6 +7,7 @@
 #include <QFuture>
 #include <QtCore>
 #include "sourceimagesmodel.h"
+#include <outputdirdialog.h>
 
 namespace Ui {
 class MainWindow;
@@ -19,9 +20,12 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+public slots:
+
     
 private:
     Ui::MainWindow *ui;
+    OutputDirDialog* dialog;
     QFileSystemModel model;
     SourceImagesModel *sourceImages;
     QFuture<std::vector<QFileInfo> > fileLoadingFuture;
@@ -36,6 +40,7 @@ private slots:
     void didPressConvertButton();
     void didPressCancelButton();
     void loadingFilesDidFinish();
+    void didPressOutputButton();
 
 };
 

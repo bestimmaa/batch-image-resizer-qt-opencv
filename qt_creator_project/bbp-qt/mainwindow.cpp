@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <QString>
 #include <QDebug>
-
+#include <outputdirdialog.h>
 
 using namespace std;
 bool scanningStopped = false;
@@ -48,6 +48,7 @@ std::vector<QFileInfo> scanDir(const QString &path){
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
+    dialog(new OutputDirDialog),
     sourceImages(new SourceImagesModel),
     scanResults(new std::vector<QFileInfo>)
 
@@ -59,6 +60,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
+    connect(ui->buttonOutput,SIGNAL(clicked()),this,SLOT(didPressOutputButton()));
     this->setLoadingIsActive(false);
     this->updateUI();
 
@@ -68,6 +70,7 @@ MainWindow::~MainWindow()
 {
     delete ui;
     delete scanResults;
+    delete dialog;
 }
 
 void MainWindow::setLoadingIsActive(bool loading){
@@ -123,4 +126,7 @@ void MainWindow::updateUI(){
     }
 }
 
+void MainWindow::didPressOutputButton(){
 
+    dialog->show();
+}

@@ -108,7 +108,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="buttonOutput">
            <property name="text">
             <string>Change</string>
            </property>

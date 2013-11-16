@@ -14,14 +14,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     sourceimagesmodel.cpp \
     imageprocessor.cpp \
-    opencvhelper.cpp
+    opencvhelper.cpp \
+    outputdirdialog.cpp
 
 HEADERS  += mainwindow.h \
     sourceimagesmodel.h \
     imageprocessor.h \
-    opencvhelper.h
+    opencvhelper.h \
+    outputdirdialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    outputdirdialog.ui
 
 LIBS += -lopencv_core
 LIBS += -lopencv_imgproc
