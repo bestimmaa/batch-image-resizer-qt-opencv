@@ -20,8 +20,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    QSettings* settings;
 public slots:
-
+    void updateUI();
     
 private:
     Ui::MainWindow *ui;
@@ -32,7 +33,6 @@ private:
     QFutureWatcher<std::vector<QFileInfo> > fileLoadingWatcher;
     std::vector<QFileInfo> *scanResults;
     bool loadingActive;
-    void updateUI();
     void setLoadingIsActive(bool);
 
 private slots:

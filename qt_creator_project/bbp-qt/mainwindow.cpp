@@ -48,22 +48,27 @@ std::vector<QFileInfo> scanDir(const QString &path){
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    dialog(new OutputDirDialog),
     sourceImages(new SourceImagesModel),
     scanResults(new std::vector<QFileInfo>)
-
 {
+    QCoreApplication::setOrganizationName("Bauhaus University Weimar");
+    QCoreApplication::setOrganizationDomain("uni-weimar.de");
+    QCoreApplication::setApplicationName("Batch Image Processor");
+
     ui->setupUi(this);
-    model.setRootPath("");
     ui->dirSelector->setModel(&model);
     ui->imagesList->setModel(sourceImages);
+    dialog = new OutputDirDialog(this);
+
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
     connect(ui->buttonOutput,SIGNAL(clicked()),this,SLOT(didPressOutputButton()));
-    this->setLoadingIsActive(false);
-    this->updateUI();
 
+    model.setRootPath("");
+    settings = new QSettings();
+    setLoadingIsActive(false);
+    updateUI();
 }
 
 MainWindow::~MainWindow()
@@ -71,6 +76,7 @@ MainWindow::~MainWindow()
     delete ui;
     delete scanResults;
     delete dialog;
+    delete settings;
 }
 
 void MainWindow::setLoadingIsActive(bool loading){
@@ -110,7 +116,6 @@ void MainWindow::loadingFilesDidFinish(){
 }
 
 void MainWindow::updateUI(){
-    ui->imagesList->show();
     if(loadingActive){
         ui->dirSelector->setEnabled(false);
         ui->progressBarLoadingFiles->show();
@@ -122,8 +127,18 @@ void MainWindow::updateUI(){
         ui->progressBarLoadingFiles->hide();
         ui->buttonCancel->hide();
         ui->labelSelectFiles->setText("Select directory or file:");
-
     }
+
+    QString oDir = settings->value("output_dir").value<QString>();
+    if(QFileInfo(oDir).isDir()){
+        ui->labelOutputDir->setText(oDir);
+        ui->buttonConvert->setEnabled(true);
+    }
+    else{
+        ui->labelOutputDir->setText(QString("No valid output dir set"));
+        ui->buttonConvert->setEnabled(false);
+    }
+
 }
 
 void MainWindow::didPressOutputButton(){

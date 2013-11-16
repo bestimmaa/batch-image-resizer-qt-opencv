@@ -27,7 +27,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="buttonApply">
        <property name="text">
         <string>Set Output Directory</string>
        </property>

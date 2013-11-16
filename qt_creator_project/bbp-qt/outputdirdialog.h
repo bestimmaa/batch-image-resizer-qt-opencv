@@ -20,6 +20,12 @@ public:
 private:
     Ui::OutputDirDialog *ui;
     QFileSystemModel* model;
+    QString selectedPath;
+    void updateUI();
+private slots:
+    void didSelectFolder(QModelIndex index);
+    void buttonApplyPressed();
+
 
 };
 
