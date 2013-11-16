@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // Images list
     ui->imagesList->setModel(imagesModel);
 
-    // Preview
+    // Previews
     previewScene = new QGraphicsScene(ui->imagePreview);
     previewPixmapItem = new QGraphicsPixmapItem();
     previewScene->addItem(previewPixmapItem);
@@ -141,10 +141,12 @@ void MainWindow::updateUI(){
         ui->dirSelector->setEnabled(false);
         ui->progressBarLoadingFiles->show();
         ui->buttonCancel->show();
+        ui->imagesList->setEnabled(false);
         ui->labelSelectFiles->setText("Loading files...");
     }
     else{
         ui->dirSelector->setEnabled(true);
+        ui->imagesList->setEnabled(true);
         ui->progressBarLoadingFiles->hide();
         ui->buttonCancel->hide();
         ui->labelSelectFiles->setText("Select directory or file:");
