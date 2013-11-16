@@ -127,6 +127,5 @@ void MainWindow::updateUI(){
 }
 
 void MainWindow::didPressOutputButton(){
-
     dialog->show();
 }

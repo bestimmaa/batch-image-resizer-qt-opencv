@@ -2,6 +2,7 @@
 #define OUTPUTDIRDIALOG_H
 
 #include <QDialog>
+#include <QFileSystemModel>
 #include "ui_outputdirdialog.h"
 
 namespace Ui {
@@ -18,6 +19,8 @@ public:
     
 private:
     Ui::OutputDirDialog *ui;
+    QFileSystemModel* model;
+
 };
 
 #endif // OUTPUTDIRDIALOG_H
