@@ -139,7 +139,11 @@ void MainWindow::didSelectImage(QModelIndex index){
 void MainWindow::didPressConvertButton(){
     qDebug()<<"button convert pressed";
     std::vector<QFileInfo>files = imagesModel->allFiles();
-    resizeImages(files,settings->value("output_dir").value<QString>(),300,300);
+    if(!fileResizeFuture.isRunning()){
+        convertStopped = false;
+        fileResizeFuture = QtConcurrent::run(resizeImages,files,settings->value("output_dir").value<QString>(),300,300);
+    }
+    updateUI();
 }
 
 void MainWindow::didPressCancelButton(){

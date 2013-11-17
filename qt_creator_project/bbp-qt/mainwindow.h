@@ -31,6 +31,8 @@ private:
     SourceImagesModel *imagesModel;
     QFuture<std::vector<QFileInfo> > fileLoadingFuture;
     QFutureWatcher<std::vector<QFileInfo> > fileLoadingWatcher;
+    QFuture<void> fileResizeFuture;
+    QFutureWatcher<void> fileResizeWatcher;
     std::vector<QFileInfo> *scanResults;
     QGraphicsScene* previewScene;
     QGraphicsPixmapItem* previewPixmapItem;
