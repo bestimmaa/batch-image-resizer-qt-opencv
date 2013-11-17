@@ -8,10 +8,16 @@
 #include <QGraphicsPixmapItem>
 #include <outputdirdialog.h>
 #include <QFileInfo>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/core.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 
 using namespace std;
 bool scanningStopped = false;
+bool convertStopped = false;
 std::vector<QFileInfo> scanDir(const QString &path);
+void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight);
 
 bool checkFile(const QFileInfo &file){
     if (file.fileName().endsWith(".jpg") || file.fileName().endsWith(".jpeg")){
@@ -45,6 +51,17 @@ std::vector<QFileInfo> scanDir(const QString &path){
     }
 
     return results;
+}
+
+void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight){
+    std::vector<QFileInfo>::iterator it;
+    for(it = files.begin(); it!=files.end();++it){
+        QFileInfo info = *it;
+        cv::Mat img =  cv::imread(qPrintable(info.absoluteFilePath()));
+        cv::Mat dst;
+        cv::resize(img,dst,CvSize(),0.5,0.5,CV_INTER_LINEAR);
+        cv::imwrite(qPrintable(destinationPath+QString("/")+info.fileName()),dst);
+    }
 }
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -121,6 +138,8 @@ void MainWindow::didSelectImage(QModelIndex index){
 }
 void MainWindow::didPressConvertButton(){
     qDebug()<<"button convert pressed";
+    std::vector<QFileInfo>files = imagesModel->allFiles();
+    resizeImages(files,settings->value("output_dir").value<QString>(),300,300);
 }
 
 void MainWindow::didPressCancelButton(){

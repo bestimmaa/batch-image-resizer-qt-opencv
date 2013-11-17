@@ -56,4 +56,8 @@ QFileInfo SourceImagesModel::getFile(int row){
     return imagePaths->operator [](row);
 }
 
+std::vector<QFileInfo> SourceImagesModel::allFiles(){
+    return *imagePaths;
+}
+
 
