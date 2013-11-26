@@ -1,13 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileSystemModel>
+#include "outputdirectorydialog.h"
+
 #include <iostream>
 #include <assert.h>
+#include <QtConcurrent/QtConcurrentRun>
+#include <QFileSystemModel>
 #include <QString>
 #include <QDebug>
 #include <QGraphicsPixmapItem>
-#include <outputdirdialog.h>
 #include <QFileInfo>
+
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/core/core.hpp>
@@ -92,7 +95,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->imagePreview->setScene(previewScene);
 
     // Output dir dialog
-    dialog = new OutputDirDialog(this);
+    dialog = new OutputDirectoryDialog(this);
 
     // Connect signals and slots
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
@@ -195,3 +198,4 @@ void MainWindow::configurePreview(QString path){
     previewPixmapItem->setPixmap(*previewPixmap);
     ui->imagePreview->show();
 }
+

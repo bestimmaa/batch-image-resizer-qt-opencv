@@ -7,26 +7,26 @@
 #include <QFuture>
 #include <QtCore>
 #include "sourceimagesmodel.h"
-#include <outputdirdialog.h>
+#include "outputdirectorydialog.h"
 
-namespace Ui {
+namespace Ui{
 class MainWindow;
 }
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     QSettings* settings;
 public slots:
     void updateUI();
-    
+
 private:
     Ui::MainWindow *ui;
-    OutputDirDialog* dialog;
+    OutputDirectoryDialog* dialog;
     QFileSystemModel model;
     SourceImagesModel *imagesModel;
     QFuture<std::vector<QFileInfo> > fileLoadingFuture;
@@ -40,7 +40,6 @@ private:
     bool loadingActive;
     void setLoadingIsActive(bool);
     void configurePreview(QString path);
-
 private slots:
     void didSelectFolder(QModelIndex index);
     void didSelectImage(QModelIndex index);
@@ -48,7 +47,6 @@ private slots:
     void didPressCancelButton();
     void loadingFilesDidFinish();
     void didPressOutputButton();
-
 };
 
 #endif // MAINWINDOW_H
