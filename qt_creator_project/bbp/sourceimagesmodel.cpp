@@ -40,11 +40,13 @@ void SourceImagesModel::addFile(QFileInfo file){
 }
 
 void SourceImagesModel::addFiles(const std::vector<QFileInfo>& files){
-    beginInsertRows(QModelIndex(), imagePaths->size(), imagePaths->size()+files.size()-1);
-    std::vector<QFileInfo>::iterator it = imagePaths->end();
-    imagePaths->insert(it,files.begin(),files.end());
-    endInsertRows();
-    qDebug()<<"New model size "<<imagePaths->size();
+    if(files.size()> 0){
+        beginInsertRows(QModelIndex(), imagePaths->size(), imagePaths->size()+files.size()-1);
+        std::vector<QFileInfo>::iterator it = imagePaths->end();
+        imagePaths->insert(it,files.begin(),files.end());
+        endInsertRows();
+        qDebug()<<"New model size "<<imagePaths->size();
+    }
 }
 void SourceImagesModel::clear(){
     beginResetModel();
