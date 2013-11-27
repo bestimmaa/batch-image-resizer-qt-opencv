@@ -16,6 +16,8 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/calib3d/calib3d.hpp>
 
+#include <algorithm>    // std::max
+
 using namespace std;
 bool scanningStopped = false;
 bool convertStopped = false;
@@ -56,13 +58,17 @@ std::vector<QFileInfo> scanDir(const QString &path){
     return results;
 }
 
-void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight){
+void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight, int interpolation_algorithm){
     std::vector<QFileInfo>::iterator it;
     for(it = files.begin(); it!=files.end();++it){
         QFileInfo info = *it;
         cv::Mat img =  cv::imread(qPrintable(info.absoluteFilePath()));
+        CvSize size = img.size();
+        int max = std::max(size.width,size.height);
+        int dstMax = std::max(maxWidth,maxHeight);
+        float factor = dstMax/(float)max;
         cv::Mat dst;
-        cv::resize(img,dst,CvSize(),0.5,0.5,CV_INTER_LINEAR);
+        cv::resize(img,dst,CvSize(),factor,factor,interpolation_algorithm);
         cv::imwrite(qPrintable(destinationPath+QString("/")+info.fileName()),dst);
     }
 }
@@ -87,6 +93,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Images list
     ui->imagesList->setModel(imagesModel);
+
+    // Algo selction
+
+    ui->algoSelector->addItem(QString("bilinear"));
+    ui->algoSelector->addItem(QString("pixel area relation"));
+    ui->algoSelector->addItem(QString("bicubic (4x4)"));
+    ui->algoSelector->addItem(QString("Lanczos (8x8)"));
 
     // Previews
     previewScene = new QGraphicsScene(ui->imagePreview);
@@ -141,10 +154,27 @@ void MainWindow::didSelectImage(QModelIndex index){
 }
 void MainWindow::didPressConvertButton(){
     qDebug()<<"button convert pressed";
+    int selectedAlgo = ui->algoSelector->currentIndex();
+    switch (selectedAlgo){
+    case 0:
+        selectedAlgo = CV_INTER_LINEAR;
+        break;
+    case 1:
+        selectedAlgo = CV_INTER_AREA;
+        break;
+    case 2:
+        selectedAlgo = CV_INTER_CUBIC;
+        break;
+    case 3:
+        selectedAlgo = CV_INTER_LANCZOS4;
+        break;
+    default:
+        break;
+    };
     std::vector<QFileInfo>files = imagesModel->allFiles();
     if(!fileResizeFuture.isRunning()){
         convertStopped = false;
-        fileResizeFuture = QtConcurrent::run(resizeImages,files,settings->value("output_dir").value<QString>(),300,300);
+        fileResizeFuture = QtConcurrent::run(resizeImages,files,settings->value("output_dir").value<QString>(),300,300,selectedAlgo);
     }
     updateUI();
 }
