@@ -142,8 +142,8 @@ void MainWindow::didSelectFolder(QModelIndex index){
         scanningStopped = false;
         setLoadingIsActive(true);
         fileLoadingFuture = QtConcurrent::run(scanDir,path);
-        fileLoadingWatcher.setFuture(this->fileLoadingFuture);
         connect(&this->fileLoadingWatcher,SIGNAL(finished()),this,SLOT(loadingFilesDidFinish()));
+        fileLoadingWatcher.setFuture(this->fileLoadingFuture);
     }
 }
 
