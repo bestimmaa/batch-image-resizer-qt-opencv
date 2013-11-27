@@ -77,7 +77,9 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     imagesModel(new SourceImagesModel),
-    scanResults(new std::vector<QFileInfo>)
+    scanResults(new std::vector<QFileInfo>),
+    convertActive(false),
+    loadingActive(false)
 {
     ui->setupUi(this);
 
@@ -128,11 +130,99 @@ MainWindow::~MainWindow()
     delete settings;
 }
 
+//############### GETTER / SETTER ###############
+
+
 void MainWindow::setLoadingIsActive(bool loading){
     loadingActive = loading;
     updateUI();
 }
 
+void MainWindow::setConvertIsActive(bool convert){
+    convertActive = convert;
+    updateUI();
+}
+
+//############### CONFIGURE UI ###############
+void MainWindow::updateUI(){
+
+    //configure the dir selection and image loading
+    if(loadingActive){
+        ui->dirSelector->setEnabled(false);
+        ui->progressBarLoadingFiles->show();
+        ui->buttonCancel->show();
+        ui->imagesList->setEnabled(false);
+        ui->labelSelectFiles->setText("Loading files...");
+    }
+
+    else{
+        ui->dirSelector->setEnabled(true);
+        ui->imagesList->setEnabled(true);
+        ui->progressBarLoadingFiles->hide();
+        ui->buttonCancel->hide();
+        ui->labelSelectFiles->setText("Select directory or file:");
+    }
+
+    //configure the output field
+    QString oDir = settings->value("output_dir").value<QString>();
+    if(QFileInfo(oDir).isDir()){
+        ui->labelOutputDir->setText(oDir);
+        ui->buttonConvert->setEnabled(true);
+    }
+    else{
+        ui->labelOutputDir->setText(QString("No valid output dir set"));
+        ui->buttonConvert->setEnabled(false);
+    }
+
+    //configure the convert progress bar
+    if(convertActive){
+        ui->progressBarConvert->show();
+        ui->buttonCancelConvert->show();
+    }
+
+    else{
+        ui->progressBarConvert->hide();
+        ui->buttonCancelConvert->hide();
+    }
+
+}
+
+
+void MainWindow::configurePreview(QString path){
+    previewPixmap = new QPixmap(path);
+    previewPixmapItem->setPixmap(*previewPixmap);
+    ui->imagePreview->show();
+}
+
+//############### FUTURE CALLBACKS ###############
+
+void MainWindow::convertingFilesDidFinish(){
+    qDebug()<<"Converting did finish!";
+    setConvertIsActive(false);
+}
+
+void MainWindow::loadingFilesDidFinish(){
+    std::vector<QFileInfo> result = fileLoadingFuture.result();
+    qDebug()<<"Loading did finish with "<<result.size();
+    setLoadingIsActive(false);
+    imagesModel->clear();
+    imagesModel->addFiles(result);
+}
+
+//############### BUTTON CALLBACKS ###############
+void MainWindow::didPressOutputButton(){
+    dialog->show();
+}
+
+void MainWindow::didPressCancelButton(){
+    scanningStopped = true;
+    this->setLoadingIsActive(false);
+}
+
+void MainWindow::didPressCancelConvertButton(){
+    convertStopped = true;
+    this->setConvertIsActive(false);
+}
 
 void MainWindow::didSelectFolder(QModelIndex index){
     QFileSystemModel *fileModel = (QFileSystemModel*) ui->dirSelector->model();
@@ -149,7 +239,6 @@ void MainWindow::didSelectFolder(QModelIndex index){
 
 void MainWindow::didSelectImage(QModelIndex index){
     QFileInfo file = imagesModel->getFile(index.row());
-    qDebug()<<file.absoluteFilePath();
     configurePreview(file.absoluteFilePath());
 }
 void MainWindow::didPressConvertButton(){
@@ -174,58 +263,10 @@ void MainWindow::didPressConvertButton(){
     std::vector<QFileInfo>files = imagesModel->allFiles();
     if(!fileResizeFuture.isRunning()){
         convertStopped = false;
+        setConvertIsActive(true);
         fileResizeFuture = QtConcurrent::run(resizeImages,files,settings->value("output_dir").value<QString>(),300,300,selectedAlgo);
+        connect(&this->fileResizeWatcher,SIGNAL(finished()),this,SLOT(convertingFilesDidFinish()));
+        fileResizeWatcher.setFuture(this->fileResizeFuture);
     }
     updateUI();
 }
-
-void MainWindow::didPressCancelButton(){
-    scanningStopped = true;
-    this->setLoadingIsActive(false);
-}
-
-void MainWindow::loadingFilesDidFinish(){
-    std::vector<QFileInfo> result = fileLoadingFuture.result();
-    qDebug()<<"Loading did finish with "<<result.size();
-    setLoadingIsActive(false);
-    imagesModel->clear();
-    imagesModel->addFiles(result);
-}
-
-void MainWindow::updateUI(){
-    if(loadingActive){
-        ui->dirSelector->setEnabled(false);
-        ui->progressBarLoadingFiles->show();
-        ui->buttonCancel->show();
-        ui->imagesList->setEnabled(false);
-        ui->labelSelectFiles->setText("Loading files...");
-    }
-    else{
-        ui->dirSelector->setEnabled(true);
-        ui->imagesList->setEnabled(true);
-        ui->progressBarLoadingFiles->hide();
-        ui->buttonCancel->hide();
-        ui->labelSelectFiles->setText("Select directory or file:");
-    }
-
-    QString oDir = settings->value("output_dir").value<QString>();
-    if(QFileInfo(oDir).isDir()){
-        ui->labelOutputDir->setText(oDir);
-        ui->buttonConvert->setEnabled(true);
-    }
-    else{
-        ui->labelOutputDir->setText(QString("No valid output dir set"));
-        ui->buttonConvert->setEnabled(false);
-    }
-
-}
-
-void MainWindow::didPressOutputButton(){
-    dialog->show();
-}
-void MainWindow::configurePreview(QString path){
-    previewPixmap = new QPixmap(path);
-    previewPixmapItem->setPixmap(*previewPixmap);
-    ui->imagePreview->show();
-}
-

@@ -38,7 +38,9 @@ private:
     QGraphicsPixmapItem* previewPixmapItem;
     QPixmap* previewPixmap;
     bool loadingActive;
+    bool convertActive;
     void setLoadingIsActive(bool);
+    void setConvertIsActive(bool);
     void configurePreview(QString path);
 private slots:
     void didSelectFolder(QModelIndex index);
@@ -46,6 +48,8 @@ private slots:
     void didPressConvertButton();
     void didPressCancelButton();
     void loadingFilesDidFinish();
+    void convertingFilesDidFinish();
+    void didPressCancelConvertButton();
     void didPressOutputButton();
 };
 
