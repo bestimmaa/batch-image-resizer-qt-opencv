@@ -67,16 +67,32 @@ void resizeImages(std::vector<QFileInfo> &files,QString parentPath, QString dest
         }
         QFileInfo info = *it;
         qDebug()<<"Reading file "<< qPrintable(info.fileName());
+
+        // this is the path we want to write to (without the filename)
+        QString p = info.absolutePath();
+        p.replace(parentPath,destinationPath);
+        qDebug()<<"Target path  "<< qPrintable(p);
+
+        // read the image
         cv::Mat img =  cv::imread(qPrintable(info.absoluteFilePath()));
         CvSize size = img.size();
         qDebug()<<"Dimension: "<<size.width << " "<< size.height;
+
         int srcMax = std::max(size.width,size.height);
         int dstMax = std::max(dstSize.width(),dstSize.height());
         float factor = dstMax/(float)srcMax;
         if (factor*size.width > 1.0 && factor*size.height > 1.0 ){
+
+            // create the subfolders if nessesarcy
+            QDir dir(p);
+            if (!dir.exists()){
+              qDebug()<<"Creating subfolder...";
+              dir.mkpath(".");
+            }
+
             cv::Mat dst;
             cv::resize(img,dst,CvSize(),factor,factor,interpolation_algorithm);
-            cv::imwrite(qPrintable(destinationPath+QString("/")+info.fileName()),dst);
+            cv::imwrite(qPrintable(p+"/"+info.fileName()),dst);
         }
         else{
             qDebug()<<"Can't fit file "<< qPrintable(info.fileName())<<"with dimension "<<size.width<<"x"<<size.height <<"into constraining rect with dimension"<<dstSize.width()<<"x"<<dstSize.height()<<" factor = "<<factor;
