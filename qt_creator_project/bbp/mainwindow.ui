@@ -129,15 +129,15 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QSpinBox" name="spinBox">
+           <widget class="QSpinBox" name="spinBoxW">
             <property name="minimum">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
              <number>10000</number>
             </property>
             <property name="value">
-             <number>1</number>
+             <number>2</number>
             </property>
            </widget>
           </item>
@@ -149,9 +149,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinBox_2">
+           <widget class="QSpinBox" name="spinBoxH">
             <property name="minimum">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
              <number>10000</number>
@@ -178,8 +178,11 @@
          <layout class="QHBoxLayout" name="convertStatusLayout">
           <item>
            <widget class="QProgressBar" name="progressBarConvert">
+            <property name="maximum">
+             <number>0</number>
+            </property>
             <property name="value">
-             <number>24</number>
+             <number>-1</number>
             </property>
            </widget>
           </item>

@@ -22,8 +22,7 @@ using namespace std;
 bool scanningStopped = false;
 bool convertStopped = false;
 std::vector<QFileInfo> scanDir(const QString &path);
-void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight);
-
+void resizeImages(std::vector<QFileInfo> &files,QString parentPath, QString destinationPath, QSize dstSize, int interpolation_algorithm);
 bool checkFile(const QFileInfo &file){
     if (file.fileName().endsWith(".jpg") || file.fileName().endsWith(".jpeg")){
         return true;
@@ -43,7 +42,7 @@ std::vector<QFileInfo> scanDir(const QString &path){
             }
             QFileInfo current = it.fileInfo();
             if(current.isFile() && checkFile(current)){
-                qDebug("%s",qPrintable(current.absoluteFilePath()));
+                //qDebug("%s",qPrintable(current.absoluteFilePath()));
                 results.push_back(current);
             }
             it.next();
@@ -51,25 +50,38 @@ std::vector<QFileInfo> scanDir(const QString &path){
     }
     else{
         if (checkFile(info))
-            qDebug("%s",qPrintable(info.absoluteFilePath()));
+            //qDebug("%s",qPrintable(info.absoluteFilePath()));
             results.push_back(info);
     }
 
     return results;
 }
 
-void resizeImages(std::vector<QFileInfo> &files, QString destinationPath, int maxWidth, int maxHeight, int interpolation_algorithm){
+void resizeImages(std::vector<QFileInfo> &files,QString parentPath, QString destinationPath, QSize dstSize, int interpolation_algorithm){
     std::vector<QFileInfo>::iterator it;
+    qDebug()<<"Starting resizing for "<<files.size()<< "files";
     for(it = files.begin(); it!=files.end();++it){
+        if(convertStopped){
+            qDebug()<<"Resizing stopped!";
+            break;
+        }
         QFileInfo info = *it;
+        qDebug()<<"Reading file "<< qPrintable(info.fileName());
         cv::Mat img =  cv::imread(qPrintable(info.absoluteFilePath()));
         CvSize size = img.size();
-        int max = std::max(size.width,size.height);
-        int dstMax = std::max(maxWidth,maxHeight);
-        float factor = dstMax/(float)max;
-        cv::Mat dst;
-        cv::resize(img,dst,CvSize(),factor,factor,interpolation_algorithm);
-        cv::imwrite(qPrintable(destinationPath+QString("/")+info.fileName()),dst);
+        qDebug()<<"Dimension: "<<size.width << " "<< size.height;
+        int srcMax = std::max(size.width,size.height);
+        int dstMax = std::max(dstSize.width(),dstSize.height());
+        float factor = dstMax/(float)srcMax;
+        if (factor*size.width > 1.0 && factor*size.height > 1.0 ){
+            cv::Mat dst;
+            cv::resize(img,dst,CvSize(),factor,factor,interpolation_algorithm);
+            cv::imwrite(qPrintable(destinationPath+QString("/")+info.fileName()),dst);
+        }
+        else{
+            qDebug()<<"Can't fit file "<< qPrintable(info.fileName())<<"with dimension "<<size.width<<"x"<<size.height <<"into constraining rect with dimension"<<dstSize.width()<<"x"<<dstSize.height()<<" factor = "<<factor;
+        }
+
     }
 }
 
@@ -79,7 +91,8 @@ MainWindow::MainWindow(QWidget *parent) :
     imagesModel(new SourceImagesModel),
     scanResults(new std::vector<QFileInfo>),
     convertActive(false),
-    loadingActive(false)
+    loadingActive(false),
+    imagesParentDirectory(new QString())
 {
     ui->setupUi(this);
 
@@ -116,6 +129,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->dirSelector, SIGNAL(clicked( QModelIndex )), this, SLOT(didSelectFolder(QModelIndex)));
     connect(ui->buttonConvert,SIGNAL(clicked()),this,SLOT(didPressConvertButton()));
     connect(ui->buttonCancel,SIGNAL(clicked()),this,SLOT(didPressCancelButton()));
+    connect(ui->buttonCancelConvert,SIGNAL(clicked()),this,SLOT(didPressCancelConvertButton()));
     connect(ui->buttonOutput,SIGNAL(clicked()),this,SLOT(didPressOutputButton()));
     connect(ui->imagesList,SIGNAL(clicked(QModelIndex)),this,SLOT(didSelectImage(QModelIndex)));
     setLoadingIsActive(false);
@@ -153,6 +167,7 @@ void MainWindow::updateUI(){
         ui->buttonCancel->show();
         ui->imagesList->setEnabled(false);
         ui->labelSelectFiles->setText("Loading files...");
+        ui->buttonConvert->hide();
     }
 
     else{
@@ -161,6 +176,7 @@ void MainWindow::updateUI(){
         ui->progressBarLoadingFiles->hide();
         ui->buttonCancel->hide();
         ui->labelSelectFiles->setText("Select directory or file:");
+        ui->buttonConvert->show();
     }
 
     //configure the output field
@@ -178,11 +194,26 @@ void MainWindow::updateUI(){
     if(convertActive){
         ui->progressBarConvert->show();
         ui->buttonCancelConvert->show();
+        ui->dirSelector->setEnabled(false);
+        ui->imagesList->setEnabled(false);
+        ui->buttonOutput->setEnabled(false);
+        ui->algoSelector->setEnabled(false);
+        ui->spinBoxH->setEnabled(false);
+        ui->spinBoxW->setEnabled(false);
+        ui->buttonConvert->hide();
+
+
     }
 
     else{
         ui->progressBarConvert->hide();
         ui->buttonCancelConvert->hide();
+        ui->buttonOutput->setEnabled(true);
+        ui->algoSelector->setEnabled(true);
+        ui->spinBoxH->setEnabled(true);
+        ui->spinBoxW->setEnabled(true);
+        ui->buttonConvert->show();
+
     }
 
 }
@@ -227,6 +258,8 @@ void MainWindow::didPressCancelConvertButton(){
 void MainWindow::didSelectFolder(QModelIndex index){
     QFileSystemModel *fileModel = (QFileSystemModel*) ui->dirSelector->model();
     QString path = fileModel->filePath(index);
+    delete imagesParentDirectory;
+    imagesParentDirectory = new QString(path);
     if(!fileLoadingFuture.isRunning()){
         qDebug()<<"starting scan for path"<<path;
         scanningStopped = false;
@@ -260,11 +293,14 @@ void MainWindow::didPressConvertButton(){
     default:
         break;
     };
+    // get all files to convert
     std::vector<QFileInfo>files = imagesModel->allFiles();
+    // get the directory containing all images to recreate subfolder structure
+
     if(!fileResizeFuture.isRunning()){
         convertStopped = false;
         setConvertIsActive(true);
-        fileResizeFuture = QtConcurrent::run(resizeImages,files,settings->value("output_dir").value<QString>(),300,300,selectedAlgo);
+        fileResizeFuture = QtConcurrent::run(resizeImages,files,*imagesParentDirectory,settings->value("output_dir").value<QString>(),QSize(ui->spinBoxW->value(),ui->spinBoxH->value()),selectedAlgo);
         connect(&this->fileResizeWatcher,SIGNAL(finished()),this,SLOT(convertingFilesDidFinish()));
         fileResizeWatcher.setFuture(this->fileResizeFuture);
     }

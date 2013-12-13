@@ -34,6 +34,7 @@ private:
     QFuture<void> fileResizeFuture;
     QFutureWatcher<void> fileResizeWatcher;
     std::vector<QFileInfo> *scanResults;
+    QString* imagesParentDirectory;
     QGraphicsScene* previewScene;
     QGraphicsPixmapItem* previewPixmapItem;
     QPixmap* previewPixmap;
