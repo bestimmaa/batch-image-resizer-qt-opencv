@@ -17,4 +17,5 @@
 ehthumbs.db
 Thumbs.db
 
-qt_creator_project/build/*
+
+qt_creator_project/build/

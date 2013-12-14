@@ -24,26 +24,26 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     outputdirectorydialog.ui
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_core247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_core247d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_core247
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib -lopencv_core247d
 
-INCLUDEPATH += $$PWD/../../../../../../../opencv/build/include
-DEPENDPATH += $$PWD/../../../../../../../opencv/build/include
+INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
+DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_highgui247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_highgui247d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_highgui247
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_highgui247d
 
-INCLUDEPATH += $$PWD/../../../../../../../opencv/build/include
-DEPENDPATH += $$PWD/../../../../../../../opencv/build/include
+INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
+DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_imgproc247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_imgproc247d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_imgproc247
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_imgproc247d
 
-INCLUDEPATH += $$PWD/../../../../../../../opencv/build/include
-DEPENDPATH += $$PWD/../../../../../../../opencv/build/include
+INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
+DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_calib3d247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../../../opencv/build/x64/vc11/lib/ -lopencv_calib3d247d
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_calib3d247
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_calib3d247d
 
-INCLUDEPATH += $$PWD/../../../../../../../opencv/build/include
-DEPENDPATH += $$PWD/../../../../../../../opencv/build/include
+INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
+DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
