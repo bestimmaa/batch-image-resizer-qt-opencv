@@ -37,7 +37,7 @@ CDeviceInfoApp theApp;
 
 // CDeviceInfoApp initialization
 
-BOOL CDeviceInfoApp::InitInstance()
+BOOL CDeviceInfoApp::()
 {
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable

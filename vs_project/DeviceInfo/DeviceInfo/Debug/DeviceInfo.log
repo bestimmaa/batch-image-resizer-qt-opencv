@@ -1,5 +1,22 @@
-﻿Build started 1/8/2014 8:10:57 PM.
+﻿Build started 1/8/2014 11:37:59 PM.
+     1>Project "C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\DeviceInfo\DeviceInfo.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\DeviceInfo.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _WINDOWS /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\DeviceInfo.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DeviceInfo.cpp DeviceInfoDlg.cpp
+         DeviceInfoDlg.cpp
+         DeviceInfo.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _DEBUG /D _UNICODE /D UNICODE /D _AFXDLL /l"0x0409" /IDebug\ /nologo /fo"Debug\DeviceInfo.res" DeviceInfo.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\Debug\DeviceInfo.exe" /INCREMENTAL /NOLOGO /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /manifestinput:"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\Include\Manifest\dpiaware.manifest" /DEBUG /PDB:"C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\Debug\DeviceInfo.pdb" /SUBSYSTEM:WINDOWS /TLBID:1 /ENTRY:"wWinMainCRTStartup" /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\Debug\DeviceInfo.lib" /MACHINE:X86 Debug\DeviceInfo.res
+         Debug\DeviceInfo.obj
+         Debug\DeviceInfoDlg.obj
+         Debug\stdafx.obj
+         DeviceInfo.vcxproj -> C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\Debug\DeviceInfo.exe
+     1>Done Building Project "C:\Users\Christoph\work\banafshehsbatchprocessor\vs_project\DeviceInfo\DeviceInfo\DeviceInfo.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:04.43
