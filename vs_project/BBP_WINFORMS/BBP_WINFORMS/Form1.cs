@@ -15,7 +15,15 @@ namespace BBP_WINFORMS
         public Form1()
         {
             InitializeComponent();
+            setupUI();
             updateUI();
+        }
+
+        private void setupUI()
+        {
+            var algorithms = new[] { "Bikubisch" };
+            ComboBox tbx = this.Controls.Find("comboBoxAlgorithm", true).FirstOrDefault() as ComboBox;
+            tbx.DataSource = algorithms;
         }
 
         private void updateUI()
