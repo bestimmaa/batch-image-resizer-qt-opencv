@@ -59,18 +59,19 @@ namespace BBP_WINFORMS
                         queue.Enqueue(subDir);
                     }
                 }
-                catch (Exception ex)
+                catch (UnauthorizedAccessException ex)
                 {
-                    Console.Error.WriteLine(ex);
+                   // Console.Error.WriteLine(ex);
                 }
                 string[] files = null;
                 try
                 {
-                    files = Directory.GetFiles(path);
+                    var filteredResults = Directory.GetFiles(path).Where(data => data.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) == true || data.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) == true);
+                    files = filteredResults.ToArray();
                 }
-                catch (Exception ex)
+                catch (UnauthorizedAccessException ex)
                 {
-                    Console.Error.WriteLine(ex);
+                    //Console.Error.WriteLine(ex);
                 }
                 if (files != null)
                 {
@@ -108,6 +109,8 @@ namespace BBP_WINFORMS
             {
                 Console.WriteLine(file);
             }
+
+            Console.WriteLine("Scan finished!");
         }
 
         private void label1_Click_1(object sender, EventArgs e)
