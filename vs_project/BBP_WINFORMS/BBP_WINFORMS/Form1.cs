@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace BBP_WINFORMS
 {
@@ -44,6 +45,43 @@ namespace BBP_WINFORMS
 
         }
 
+        static IEnumerable<string> GetFiles(string path)
+        {
+            Queue<string> queue = new Queue<string>();
+            queue.Enqueue(path);
+            while (queue.Count > 0)
+            {
+                path = queue.Dequeue();
+                try
+                {
+                    foreach (string subDir in Directory.GetDirectories(path))
+                    {
+                        queue.Enqueue(subDir);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex);
+                }
+                string[] files = null;
+                try
+                {
+                    files = Directory.GetFiles(path);
+                }
+                catch (Exception ex)
+                {
+                    Console.Error.WriteLine(ex);
+                }
+                if (files != null)
+                {
+                    for (int i = 0; i < files.Length; i++)
+                    {
+                        yield return files[i];
+                    }
+                }
+            }
+        }
+
         private void selectScanDir(object sender, EventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog objDialog = new FolderBrowserDialog();
@@ -66,7 +104,10 @@ namespace BBP_WINFORMS
 
         private void startScan(object sender, EventArgs e)
         {
-
+            foreach (string file in GetFiles("C:/"))
+            {
+                Console.WriteLine(file);
+            }
         }
 
         private void label1_Click_1(object sender, EventArgs e)
