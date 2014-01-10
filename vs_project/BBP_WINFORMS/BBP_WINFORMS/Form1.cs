@@ -22,6 +22,8 @@ namespace BBP_WINFORMS
         {
             Label tbx = this.Controls.Find("labelCurrentDir", true).FirstOrDefault() as Label;
             tbx.Text = Properties.Settings.Default.ImageScanPath;
+            CheckBox box = this.Controls.Find("checkBoxRecursiveScan", true).FirstOrDefault() as CheckBox;
+            box.Checked = Properties.Settings.Default.RecursiveScan;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -49,10 +51,22 @@ namespace BBP_WINFORMS
 
         private void checkBoxRecursiveScan_CheckedChanged(object sender, EventArgs e)
         {
-
+            CheckBox box = sender as CheckBox;
+            Properties.Settings.Default.RecursiveScan = box.Checked;
+            updateUI();
         }
 
         private void startScan(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
 
         }

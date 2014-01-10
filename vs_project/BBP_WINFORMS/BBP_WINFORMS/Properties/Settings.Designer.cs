@@ -34,5 +34,17 @@ namespace BBP_WINFORMS.Properties {
                 this["ImageScanPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool RecursiveScan {
+            get {
+                return ((bool)(this["RecursiveScan"]));
+            }
+            set {
+                this["RecursiveScan"] = value;
+            }
+        }
     }
 }
