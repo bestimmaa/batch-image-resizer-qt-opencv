@@ -14,10 +14,12 @@ namespace BBP_WINFORMS
     public partial class Form1 : Form
     {
         private string[] scanResults;
+        private bool scanInProgress;
 
         public Form1()
         {
             scanResults = new string[]{};
+            scanInProgress = false;
             InitializeComponent();
             setupUI();
             updateUI();
@@ -32,13 +34,26 @@ namespace BBP_WINFORMS
 
         private void updateUI()
         {
-            Label tbx = this.Controls.Find("labelCurrentDir", true).FirstOrDefault() as Label;
-            tbx.Text = Properties.Settings.Default.ImageScanPath;
+            Label labelCurrentDir = this.Controls.Find("labelCurrentDir", true).FirstOrDefault() as Label;
+            labelCurrentDir.Text = Properties.Settings.Default.ImageScanPath;
+
             CheckBox box = this.Controls.Find("checkBoxRecursiveScan", true).FirstOrDefault() as CheckBox;
             box.Checked = Properties.Settings.Default.RecursiveScan;
+            box.Enabled = !scanInProgress;
+
+            Button buttonScan = this.Controls.Find("buttonScan", true).FirstOrDefault() as Button;
+            buttonScan.Enabled = !scanInProgress;
+
+            Button buttonScanDir = this.Controls.Find("buttonSelectScanDirectory", true).FirstOrDefault() as Button;
+            buttonScanDir.Enabled = !scanInProgress;
+
+            Button buttonResize = this.Controls.Find("buttonResizeImages", true).FirstOrDefault() as Button;
+            buttonResize.Enabled = !scanInProgress;
 
             //update results view
             ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
+            list.Enabled = !scanInProgress;
+            list.Items.Clear();
             for (int i = 0; i < scanResults.Length; ++i )
             {
                 ListViewItem itm = new ListViewItem(scanResults[i]);
@@ -73,7 +88,8 @@ namespace BBP_WINFORMS
                         queue.Enqueue(subDir);
                     }
                 }
-                catch (UnauthorizedAccessException ex)
+                //TODO we might miss some very deep paths by swallowing 'System.IO.PathTooLongException'
+                catch (Exception ex)
                 {
                    // Console.Error.WriteLine(ex);
                 }
@@ -83,7 +99,7 @@ namespace BBP_WINFORMS
                     var filteredResults = Directory.GetFiles(path).Where(data => data.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) == true || data.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) == true);
                     files = filteredResults.ToArray();
                 }
-                catch (UnauthorizedAccessException ex)
+                catch (Exception ex)
                 {
                     //Console.Error.WriteLine(ex);
                 }
@@ -139,13 +155,12 @@ namespace BBP_WINFORMS
 
         private async void CallGetFiles()
         {
+            scanInProgress = true;
+            updateUI();
             var results = await GetFilesAsync(Properties.Settings.Default.ImageScanPath);
             scanResults = results;
+            scanInProgress = false;
             updateUI();
-            for (int i = 0; i < results.Length; ++i )
-            {
-                Console.WriteLine(results[i]);
-            }
         }
     }
 }
