@@ -45,9 +45,11 @@ namespace BBP_WINFORMS
 
         }
 
-        static IEnumerable<string> GetFiles(string path)
+        private string[] GetFiles(string path)
         {
+            Console.WriteLine("Starting scan in path " + path);
             Queue<string> queue = new Queue<string>();
+            string[] results = {};
             queue.Enqueue(path);
             while (queue.Count > 0)
             {
@@ -75,12 +77,17 @@ namespace BBP_WINFORMS
                 }
                 if (files != null)
                 {
-                    for (int i = 0; i < files.Length; i++)
-                    {
-                        yield return files[i];
-                    }
+                    results = results.Concat(files).ToArray();
                 }
             }
+
+            Console.WriteLine("Finished with {0:d} results", results.Length);
+
+            return results;
+        }
+        private Task<string[]> GetFilesAsync(string path)
+        {
+            return Task.Run<string[]>(() => GetFiles(path));
         }
 
         private void selectScanDir(object sender, EventArgs e)
@@ -105,12 +112,7 @@ namespace BBP_WINFORMS
 
         private void startScan(object sender, EventArgs e)
         {
-            foreach (string file in GetFiles(Properties.Settings.Default.ImageScanPath))
-            {
-                Console.WriteLine(file);
-            }
-
-            Console.WriteLine("Scan finished!");
+            CallGetFiles();
         }
 
         private void label1_Click_1(object sender, EventArgs e)
@@ -123,5 +125,13 @@ namespace BBP_WINFORMS
 
         }
 
+        private async void CallGetFiles()
+        {
+            var results = await GetFilesAsync(Properties.Settings.Default.ImageScanPath);
+            for (int i = 0; i < results.Length; ++i )
+            {
+                Console.WriteLine(results[i]);
+            }
+        }
     }
 }
