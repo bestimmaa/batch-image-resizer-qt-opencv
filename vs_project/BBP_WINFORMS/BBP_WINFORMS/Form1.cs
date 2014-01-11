@@ -61,12 +61,7 @@ namespace BBP_WINFORMS
             //update results view
             ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
             list.Enabled = !scanInProgress;
-            list.Items.Clear();
-            for (int i = 0; i < scanResults.Length; ++i )
-            {
-                ListViewItem itm = new ListViewItem(scanResults[i]);
-                list.Items.Add(itm);
-            }
+
 
         }
 
@@ -74,6 +69,25 @@ namespace BBP_WINFORMS
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void ResizeImages(string[] images)
+        {
+            for (int i = 0; i < images.Length; ++i)
+            {
+                Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
+                Image<Bgr, byte> resizedImage = captureImage.Resize(50, 50, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            }
+        }
+
+        private Task ResizeImagesAsync(string[] images){
+            return Task.Run(()=> ResizeImages(images));
+        }
+
+        private async void CallResizeImages()
+        {
+            await ResizeImagesAsync(scanResults);
+            Console.WriteLine("Resizing did finish!");
         }
 
         private string[] GetFiles(string path)
@@ -122,6 +136,25 @@ namespace BBP_WINFORMS
             return Task.Run<string[]>(() => GetFiles(path));
         }
 
+        private async void CallGetFiles()
+        {
+            scanInProgress = true;
+            updateUI();
+            var results = await GetFilesAsync(Properties.Settings.Default.ImageScanPath);
+            scanResults = results;
+            scanInProgress = false;
+
+            ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
+            list.Items.Clear();
+            for (int i = 0; i < scanResults.Length; ++i)
+            {
+                ListViewItem itm = new ListViewItem(scanResults[i]);
+                list.Items.Add(itm);
+            }
+            updateUI();
+        }
+
+
         private void selectScanDir(object sender, EventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog objDialog = new FolderBrowserDialog();
@@ -147,16 +180,6 @@ namespace BBP_WINFORMS
             CallGetFiles();
         }
 
-        private async void CallGetFiles()
-        {
-            scanInProgress = true;
-            updateUI();
-            var results = await GetFilesAsync(Properties.Settings.Default.ImageScanPath);
-            scanResults = results;
-            scanInProgress = false;
-            updateUI();
-        }
-
         private void didSelectImage(object sender, EventArgs e)
         {
             ListView list = sender as ListView;
@@ -171,7 +194,7 @@ namespace BBP_WINFORMS
 
         private void startResize(object sender, EventArgs e)
         {
-
+            CallResizeImages();
         }
     }
 }
