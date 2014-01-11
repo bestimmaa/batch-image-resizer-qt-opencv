@@ -1,6 +1,6 @@
 ﻿namespace BBP_WINFORMS
 {
-    partial class Form1
+    partial class BBPMainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -30,6 +30,7 @@
         {
             this.listViewImages = new System.Windows.Forms.ListView();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.labelCurrentDir = new System.Windows.Forms.Label();
             this.buttonSelectScanDirectory = new System.Windows.Forms.Button();
             this.checkBoxRecursiveScan = new System.Windows.Forms.CheckBox();
@@ -45,14 +46,13 @@
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonResizeImages = new System.Windows.Forms.Button();
             this.checkBoxKeepFolderStructure = new System.Windows.Forms.CheckBox();
-            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             this.flowLayoutPanel3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // listViewImages
@@ -76,6 +76,14 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(163, 249);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
+            // pictureBoxPreview
+            // 
+            this.pictureBoxPreview.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxPreview.Name = "pictureBoxPreview";
+            this.pictureBoxPreview.Size = new System.Drawing.Size(160, 123);
+            this.pictureBoxPreview.TabIndex = 6;
+            this.pictureBoxPreview.TabStop = false;
+            // 
             // labelCurrentDir
             // 
             this.labelCurrentDir.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -85,7 +93,6 @@
             this.labelCurrentDir.Size = new System.Drawing.Size(76, 13);
             this.labelCurrentDir.TabIndex = 0;
             this.labelCurrentDir.Text = "labelCurrentDir";
-            this.labelCurrentDir.Click += new System.EventHandler(this.label1_Click);
             // 
             // buttonSelectScanDirectory
             // 
@@ -161,14 +168,28 @@
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Width";
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // numericUpDownWidth
             // 
             this.numericUpDownWidth.Location = new System.Drawing.Point(44, 3);
+            this.numericUpDownWidth.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDownWidth.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.numericUpDownWidth.Name = "numericUpDownWidth";
             this.numericUpDownWidth.Size = new System.Drawing.Size(72, 20);
             this.numericUpDownWidth.TabIndex = 0;
+            this.numericUpDownWidth.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // label2
             // 
@@ -182,9 +203,24 @@
             // numericUpDownHeight
             // 
             this.numericUpDownHeight.Location = new System.Drawing.Point(166, 3);
+            this.numericUpDownHeight.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDownHeight.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             this.numericUpDownHeight.Name = "numericUpDownHeight";
             this.numericUpDownHeight.Size = new System.Drawing.Size(56, 20);
             this.numericUpDownHeight.TabIndex = 1;
+            this.numericUpDownHeight.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // label3
             // 
@@ -220,7 +256,7 @@
             this.buttonResizeImages.TabIndex = 7;
             this.buttonResizeImages.Text = "Resize Images";
             this.buttonResizeImages.UseVisualStyleBackColor = true;
-            this.buttonResizeImages.Click += new System.EventHandler(this.button1_Click);
+            this.buttonResizeImages.Click += new System.EventHandler(this.startResize);
             // 
             // checkBoxKeepFolderStructure
             // 
@@ -232,24 +268,17 @@
             this.checkBoxKeepFolderStructure.Text = "Keep original folder structure";
             this.checkBoxKeepFolderStructure.UseVisualStyleBackColor = true;
             // 
-            // pictureBoxPreview
-            // 
-            this.pictureBoxPreview.Location = new System.Drawing.Point(3, 3);
-            this.pictureBoxPreview.Name = "pictureBoxPreview";
-            this.pictureBoxPreview.Size = new System.Drawing.Size(160, 123);
-            this.pictureBoxPreview.TabIndex = 6;
-            this.pictureBoxPreview.TabStop = false;
-            // 
-            // Form1
+            // BBPMainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 406);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Name = "Form1";
+            this.Name = "BBPMainWindow";
             this.Text = "BBP";
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
@@ -257,7 +286,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.ResumeLayout(false);
 
         }

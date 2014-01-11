@@ -14,13 +14,13 @@ using Emgu.CV.Structure;
 
 namespace BBP_WINFORMS
 {
-    public partial class Form1 : Form
+    public partial class BBPMainWindow : Form
     {
         private string[] scanResults;
         private bool scanInProgress;
-        Image<Bgr, Byte> previewImage;
+        private Image<Bgr, Byte> previewImage;
 
-        public Form1()
+        public BBPMainWindow()
         {
             scanResults = new string[]{};
             scanInProgress = false;
@@ -31,7 +31,7 @@ namespace BBP_WINFORMS
 
         private void setupUI()
         {
-            var algorithms = new[] { "Bikubisch" };
+            var algorithms = new[] { "bilinear", "pixel area relation", "bicubic (4x4)", "Lanczos (8x8)" };
             ComboBox tbx = this.Controls.Find("comboBoxAlgorithm", true).FirstOrDefault() as ComboBox;
             tbx.DataSource = algorithms;
         }
@@ -70,10 +70,6 @@ namespace BBP_WINFORMS
 
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
@@ -151,16 +147,6 @@ namespace BBP_WINFORMS
             CallGetFiles();
         }
 
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private async void CallGetFiles()
         {
             scanInProgress = true;
@@ -181,6 +167,11 @@ namespace BBP_WINFORMS
                 previewImage = new Image<Bgr, byte>(imagePath);
                 updateUI();
             }
+        }
+
+        private void startResize(object sender, EventArgs e)
+        {
+
         }
     }
 }
