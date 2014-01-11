@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,22 +72,24 @@ namespace BBP_WINFORMS
 
         }
 
-        private void ResizeImages(string[] images)
+        private void ResizeImages(string[] images, Emgu.CV.CvEnum.INTER algo)
         {
             for (int i = 0; i < images.Length; ++i)
             {
                 Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
-                Image<Bgr, byte> resizedImage = captureImage.Resize(50, 50, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+                Image<Bgr, byte> resizedImage = captureImage.Resize(50, 50, algo);
+                saveJpeg("test.jpg", resizedImage.ToBitmap(), 100);
             }
         }
 
-        private Task ResizeImagesAsync(string[] images){
-            return Task.Run(()=> ResizeImages(images));
+        private Task ResizeImagesAsync(string[] images, Emgu.CV.CvEnum.INTER algo)
+        {
+            return Task.Run(()=> ResizeImages(images,algo));
         }
 
         private async void CallResizeImages()
         {
-            await ResizeImagesAsync(scanResults);
+            await ResizeImagesAsync(scanResults,Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             Console.WriteLine("Resizing did finish!");
         }
 
@@ -195,6 +198,36 @@ namespace BBP_WINFORMS
         private void startResize(object sender, EventArgs e)
         {
             CallResizeImages();
+        }
+
+        private void saveJpeg(string path, Bitmap img, long quality)
+        {
+            // Encoder parameter for image quality
+
+            EncoderParameter qualityParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
+
+            // Jpeg image codec
+            ImageCodecInfo jpegCodec = this.getEncoderInfo("image/jpeg");
+
+            if (jpegCodec == null)
+                return;
+
+            EncoderParameters encoderParams = new EncoderParameters(1);
+            encoderParams.Param[0] = qualityParam;
+
+            img.Save(path, jpegCodec, encoderParams);
+        }
+
+        private ImageCodecInfo getEncoderInfo(string mimeType)
+        {
+            // Get image codecs for all image formats
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+
+            // Find the correct image codec
+            for (int i = 0; i < codecs.Length; i++)
+                if (codecs[i].MimeType == mimeType)
+                    return codecs[i];
+            return null;
         }
     }
 }
