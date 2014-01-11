@@ -13,8 +13,11 @@ namespace BBP_WINFORMS
 {
     public partial class Form1 : Form
     {
+        private string[] scanResults;
+
         public Form1()
         {
+            scanResults = new string[]{};
             InitializeComponent();
             setupUI();
             updateUI();
@@ -33,6 +36,15 @@ namespace BBP_WINFORMS
             tbx.Text = Properties.Settings.Default.ImageScanPath;
             CheckBox box = this.Controls.Find("checkBoxRecursiveScan", true).FirstOrDefault() as CheckBox;
             box.Checked = Properties.Settings.Default.RecursiveScan;
+
+            //update results view
+            ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
+            for (int i = 0; i < scanResults.Length; ++i )
+            {
+                ListViewItem itm = new ListViewItem(scanResults[i]);
+                list.Items.Add(itm);
+            }
+
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -128,6 +140,8 @@ namespace BBP_WINFORMS
         private async void CallGetFiles()
         {
             var results = await GetFilesAsync(Properties.Settings.Default.ImageScanPath);
+            scanResults = results;
+            updateUI();
             for (int i = 0; i < results.Length; ++i )
             {
                 Console.WriteLine(results[i]);
