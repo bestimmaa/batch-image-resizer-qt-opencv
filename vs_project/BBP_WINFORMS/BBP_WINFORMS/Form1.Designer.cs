@@ -45,12 +45,14 @@
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
             this.buttonResizeImages = new System.Windows.Forms.Button();
             this.checkBoxKeepFolderStructure = new System.Windows.Forms.CheckBox();
+            this.pictureBoxPreview = new System.Windows.Forms.PictureBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).BeginInit();
             this.flowLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // listViewImages
@@ -60,9 +62,11 @@
             this.listViewImages.Size = new System.Drawing.Size(432, 249);
             this.listViewImages.TabIndex = 5;
             this.listViewImages.UseCompatibleStateImageBehavior = false;
+            this.listViewImages.SelectedIndexChanged += new System.EventHandler(this.didSelectImage);
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.pictureBoxPreview);
             this.flowLayoutPanel1.Controls.Add(this.labelCurrentDir);
             this.flowLayoutPanel1.Controls.Add(this.buttonSelectScanDirectory);
             this.flowLayoutPanel1.Controls.Add(this.checkBoxRecursiveScan);
@@ -76,7 +80,7 @@
             // 
             this.labelCurrentDir.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelCurrentDir.AutoSize = true;
-            this.labelCurrentDir.Location = new System.Drawing.Point(3, 0);
+            this.labelCurrentDir.Location = new System.Drawing.Point(3, 129);
             this.labelCurrentDir.Name = "labelCurrentDir";
             this.labelCurrentDir.Size = new System.Drawing.Size(76, 13);
             this.labelCurrentDir.TabIndex = 0;
@@ -86,7 +90,7 @@
             // buttonSelectScanDirectory
             // 
             this.buttonSelectScanDirectory.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonSelectScanDirectory.Location = new System.Drawing.Point(3, 16);
+            this.buttonSelectScanDirectory.Location = new System.Drawing.Point(3, 145);
             this.buttonSelectScanDirectory.Name = "buttonSelectScanDirectory";
             this.buttonSelectScanDirectory.Size = new System.Drawing.Size(160, 23);
             this.buttonSelectScanDirectory.TabIndex = 1;
@@ -98,7 +102,7 @@
             // 
             this.checkBoxRecursiveScan.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.checkBoxRecursiveScan.AutoSize = true;
-            this.checkBoxRecursiveScan.Location = new System.Drawing.Point(3, 45);
+            this.checkBoxRecursiveScan.Location = new System.Drawing.Point(3, 174);
             this.checkBoxRecursiveScan.Name = "checkBoxRecursiveScan";
             this.checkBoxRecursiveScan.Size = new System.Drawing.Size(122, 17);
             this.checkBoxRecursiveScan.TabIndex = 3;
@@ -109,7 +113,7 @@
             // buttonScan
             // 
             this.buttonScan.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonScan.Location = new System.Drawing.Point(3, 68);
+            this.buttonScan.Location = new System.Drawing.Point(3, 197);
             this.buttonScan.Name = "buttonScan";
             this.buttonScan.Size = new System.Drawing.Size(160, 23);
             this.buttonScan.TabIndex = 4;
@@ -228,11 +232,19 @@
             this.checkBoxKeepFolderStructure.Text = "Keep original folder structure";
             this.checkBoxKeepFolderStructure.UseVisualStyleBackColor = true;
             // 
+            // pictureBoxPreview
+            // 
+            this.pictureBoxPreview.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxPreview.Name = "pictureBoxPreview";
+            this.pictureBoxPreview.Size = new System.Drawing.Size(160, 123);
+            this.pictureBoxPreview.TabIndex = 6;
+            this.pictureBoxPreview.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(654, 406);
+            this.ClientSize = new System.Drawing.Size(644, 406);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Form1";
             this.Text = "BBP";
@@ -245,6 +257,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownHeight)).EndInit();
             this.flowLayoutPanel3.ResumeLayout(false);
             this.flowLayoutPanel3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPreview)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -268,6 +281,7 @@
         private System.Windows.Forms.CheckBox checkBoxKeepFolderStructure;
         private System.Windows.Forms.Button buttonResizeImages;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.PictureBox pictureBoxPreview;
 
 
     }

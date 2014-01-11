@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using Emgu.CV;
+using Emgu.Util;
+using Emgu.CV.Structure;
 
 namespace BBP_WINFORMS
 {
@@ -15,6 +18,7 @@ namespace BBP_WINFORMS
     {
         private string[] scanResults;
         private bool scanInProgress;
+        Image<Bgr, Byte> previewImage;
 
         public Form1()
         {
@@ -49,6 +53,10 @@ namespace BBP_WINFORMS
 
             Button buttonResize = this.Controls.Find("buttonResizeImages", true).FirstOrDefault() as Button;
             buttonResize.Enabled = !scanInProgress;
+
+            PictureBox pictureBoxPreview = this.Controls.Find("pictureBoxPreview", true).FirstOrDefault() as PictureBox;
+            if(previewImage != null)
+                pictureBoxPreview.Image = previewImage.ToBitmap();    
 
             //update results view
             ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
@@ -161,6 +169,18 @@ namespace BBP_WINFORMS
             scanResults = results;
             scanInProgress = false;
             updateUI();
+        }
+
+        private void didSelectImage(object sender, EventArgs e)
+        {
+            ListView list = sender as ListView;
+            if (list.SelectedItems.Count > 0)
+            {
+                int index = list.SelectedItems[0].Index;
+                string imagePath = scanResults[index];
+                previewImage = new Image<Bgr, byte>(imagePath);
+                updateUI();
+            }
         }
     }
 }
