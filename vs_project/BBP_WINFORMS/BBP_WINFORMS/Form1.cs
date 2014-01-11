@@ -105,7 +105,7 @@ namespace BBP_WINFORMS
 
         private void startScan(object sender, EventArgs e)
         {
-            foreach (string file in GetFiles("C:/"))
+            foreach (string file in GetFiles(Properties.Settings.Default.ImageScanPath))
             {
                 Console.WriteLine(file);
             }

@@ -30,21 +30,21 @@
         {
             this.listViewImages = new System.Windows.Forms.ListView();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonScan = new System.Windows.Forms.Button();
-            this.checkBoxRecursiveScan = new System.Windows.Forms.CheckBox();
-            this.buttonSelectScanDirectory = new System.Windows.Forms.Button();
             this.labelCurrentDir = new System.Windows.Forms.Label();
+            this.buttonSelectScanDirectory = new System.Windows.Forms.Button();
+            this.checkBoxRecursiveScan = new System.Windows.Forms.CheckBox();
+            this.buttonScan = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
-            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
+            this.numericUpDownWidth = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownHeight = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBoxAlgorithm = new System.Windows.Forms.ComboBox();
-            this.checkBoxKeepFolderStructure = new System.Windows.Forms.CheckBox();
-            this.buttonResizeImages = new System.Windows.Forms.Button();
             this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.buttonResizeImages = new System.Windows.Forms.Button();
+            this.checkBoxKeepFolderStructure = new System.Windows.Forms.CheckBox();
             this.flowLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
@@ -72,16 +72,27 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(163, 249);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
-            // buttonScan
+            // labelCurrentDir
             // 
-            this.buttonScan.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonScan.Location = new System.Drawing.Point(3, 68);
-            this.buttonScan.Name = "buttonScan";
-            this.buttonScan.Size = new System.Drawing.Size(160, 23);
-            this.buttonScan.TabIndex = 4;
-            this.buttonScan.Text = "Scan Directory";
-            this.buttonScan.UseVisualStyleBackColor = true;
-            this.buttonScan.Click += new System.EventHandler(this.startScan);
+            this.labelCurrentDir.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.labelCurrentDir.AutoSize = true;
+            this.labelCurrentDir.Location = new System.Drawing.Point(3, 0);
+            this.labelCurrentDir.Name = "labelCurrentDir";
+            this.labelCurrentDir.Size = new System.Drawing.Size(76, 13);
+            this.labelCurrentDir.TabIndex = 0;
+            this.labelCurrentDir.Text = "labelCurrentDir";
+            this.labelCurrentDir.Click += new System.EventHandler(this.label1_Click);
+            // 
+            // buttonSelectScanDirectory
+            // 
+            this.buttonSelectScanDirectory.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonSelectScanDirectory.Location = new System.Drawing.Point(3, 16);
+            this.buttonSelectScanDirectory.Name = "buttonSelectScanDirectory";
+            this.buttonSelectScanDirectory.Size = new System.Drawing.Size(160, 23);
+            this.buttonSelectScanDirectory.TabIndex = 1;
+            this.buttonSelectScanDirectory.Text = "Select Directory";
+            this.buttonSelectScanDirectory.UseVisualStyleBackColor = true;
+            this.buttonSelectScanDirectory.Click += new System.EventHandler(this.selectScanDir);
             // 
             // checkBoxRecursiveScan
             // 
@@ -95,27 +106,16 @@
             this.checkBoxRecursiveScan.UseVisualStyleBackColor = true;
             this.checkBoxRecursiveScan.CheckedChanged += new System.EventHandler(this.checkBoxRecursiveScan_CheckedChanged);
             // 
-            // buttonSelectScanDirectory
+            // buttonScan
             // 
-            this.buttonSelectScanDirectory.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.buttonSelectScanDirectory.Location = new System.Drawing.Point(3, 16);
-            this.buttonSelectScanDirectory.Name = "buttonSelectScanDirectory";
-            this.buttonSelectScanDirectory.Size = new System.Drawing.Size(160, 23);
-            this.buttonSelectScanDirectory.TabIndex = 1;
-            this.buttonSelectScanDirectory.Text = "Select Directory";
-            this.buttonSelectScanDirectory.UseVisualStyleBackColor = true;
-            this.buttonSelectScanDirectory.Click += new System.EventHandler(this.selectScanDir);
-            // 
-            // labelCurrentDir
-            // 
-            this.labelCurrentDir.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.labelCurrentDir.AutoSize = true;
-            this.labelCurrentDir.Location = new System.Drawing.Point(3, 0);
-            this.labelCurrentDir.Name = "labelCurrentDir";
-            this.labelCurrentDir.Size = new System.Drawing.Size(76, 13);
-            this.labelCurrentDir.TabIndex = 0;
-            this.labelCurrentDir.Text = "labelCurrentDir";
-            this.labelCurrentDir.Click += new System.EventHandler(this.label1_Click);
+            this.buttonScan.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.buttonScan.Location = new System.Drawing.Point(3, 68);
+            this.buttonScan.Name = "buttonScan";
+            this.buttonScan.Size = new System.Drawing.Size(160, 23);
+            this.buttonScan.TabIndex = 4;
+            this.buttonScan.Text = "Scan Directory";
+            this.buttonScan.UseVisualStyleBackColor = true;
+            this.buttonScan.Click += new System.EventHandler(this.startScan);
             // 
             // tableLayoutPanel1
             // 
@@ -149,20 +149,6 @@
             this.flowLayoutPanel2.Size = new System.Drawing.Size(432, 99);
             this.flowLayoutPanel2.TabIndex = 6;
             // 
-            // numericUpDownWidth
-            // 
-            this.numericUpDownWidth.Location = new System.Drawing.Point(44, 3);
-            this.numericUpDownWidth.Name = "numericUpDownWidth";
-            this.numericUpDownWidth.Size = new System.Drawing.Size(72, 20);
-            this.numericUpDownWidth.TabIndex = 0;
-            // 
-            // numericUpDownHeight
-            // 
-            this.numericUpDownHeight.Location = new System.Drawing.Point(166, 3);
-            this.numericUpDownHeight.Name = "numericUpDownHeight";
-            this.numericUpDownHeight.Size = new System.Drawing.Size(56, 20);
-            this.numericUpDownHeight.TabIndex = 1;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -173,6 +159,13 @@
             this.label1.Text = "Width";
             this.label1.Click += new System.EventHandler(this.label1_Click_1);
             // 
+            // numericUpDownWidth
+            // 
+            this.numericUpDownWidth.Location = new System.Drawing.Point(44, 3);
+            this.numericUpDownWidth.Name = "numericUpDownWidth";
+            this.numericUpDownWidth.Size = new System.Drawing.Size(72, 20);
+            this.numericUpDownWidth.TabIndex = 0;
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -181,6 +174,13 @@
             this.label2.Size = new System.Drawing.Size(38, 13);
             this.label2.TabIndex = 3;
             this.label2.Text = "Height";
+            // 
+            // numericUpDownHeight
+            // 
+            this.numericUpDownHeight.Location = new System.Drawing.Point(166, 3);
+            this.numericUpDownHeight.Name = "numericUpDownHeight";
+            this.numericUpDownHeight.Size = new System.Drawing.Size(56, 20);
+            this.numericUpDownHeight.TabIndex = 1;
             // 
             // label3
             // 
@@ -199,15 +199,14 @@
             this.comboBoxAlgorithm.Size = new System.Drawing.Size(139, 21);
             this.comboBoxAlgorithm.TabIndex = 5;
             // 
-            // checkBoxKeepFolderStructure
+            // flowLayoutPanel3
             // 
-            this.checkBoxKeepFolderStructure.AutoSize = true;
-            this.checkBoxKeepFolderStructure.Location = new System.Drawing.Point(3, 32);
-            this.checkBoxKeepFolderStructure.Name = "checkBoxKeepFolderStructure";
-            this.checkBoxKeepFolderStructure.Size = new System.Drawing.Size(160, 17);
-            this.checkBoxKeepFolderStructure.TabIndex = 6;
-            this.checkBoxKeepFolderStructure.Text = "Keep original folder structure";
-            this.checkBoxKeepFolderStructure.UseVisualStyleBackColor = true;
+            this.flowLayoutPanel3.Controls.Add(this.buttonResizeImages);
+            this.flowLayoutPanel3.Controls.Add(this.checkBoxKeepFolderStructure);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 279);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(163, 99);
+            this.flowLayoutPanel3.TabIndex = 7;
             // 
             // buttonResizeImages
             // 
@@ -219,14 +218,15 @@
             this.buttonResizeImages.UseVisualStyleBackColor = true;
             this.buttonResizeImages.Click += new System.EventHandler(this.button1_Click);
             // 
-            // flowLayoutPanel3
+            // checkBoxKeepFolderStructure
             // 
-            this.flowLayoutPanel3.Controls.Add(this.buttonResizeImages);
-            this.flowLayoutPanel3.Controls.Add(this.checkBoxKeepFolderStructure);
-            this.flowLayoutPanel3.Location = new System.Drawing.Point(3, 279);
-            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
-            this.flowLayoutPanel3.Size = new System.Drawing.Size(163, 99);
-            this.flowLayoutPanel3.TabIndex = 7;
+            this.checkBoxKeepFolderStructure.AutoSize = true;
+            this.checkBoxKeepFolderStructure.Location = new System.Drawing.Point(3, 32);
+            this.checkBoxKeepFolderStructure.Name = "checkBoxKeepFolderStructure";
+            this.checkBoxKeepFolderStructure.Size = new System.Drawing.Size(160, 17);
+            this.checkBoxKeepFolderStructure.TabIndex = 6;
+            this.checkBoxKeepFolderStructure.Text = "Keep original folder structure";
+            this.checkBoxKeepFolderStructure.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
