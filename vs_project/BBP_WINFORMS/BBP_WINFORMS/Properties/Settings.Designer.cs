@@ -46,5 +46,29 @@ namespace BBP_WINFORMS.Properties {
                 this["RecursiveScan"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:/")]
+        public string ImageOutputPath {
+            get {
+                return ((string)(this["ImageOutputPath"]));
+            }
+            set {
+                this["ImageOutputPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool KeepDirectoryStructure {
+            get {
+                return ((bool)(this["KeepDirectoryStructure"]));
+            }
+            set {
+                this["KeepDirectoryStructure"] = value;
+            }
+        }
     }
 }

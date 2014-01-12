@@ -23,7 +23,7 @@ namespace BBP_WINFORMS
 
         public BBPMainWindow()
         {
-            scanResults = new string[]{};
+            scanResults = new string[] { };
             scanInProgress = false;
             InitializeComponent();
             setupUI();
@@ -42,8 +42,15 @@ namespace BBP_WINFORMS
             Label labelCurrentDir = this.Controls.Find("labelCurrentDir", true).FirstOrDefault() as Label;
             labelCurrentDir.Text = Properties.Settings.Default.ImageScanPath;
 
+            Label labelOutputDir = this.Controls.Find("labelOutputDir", true).FirstOrDefault() as Label;
+            labelOutputDir.Text = Properties.Settings.Default.ImageOutputPath;
+
             CheckBox box = this.Controls.Find("checkBoxRecursiveScan", true).FirstOrDefault() as CheckBox;
             box.Checked = Properties.Settings.Default.RecursiveScan;
+            box.Enabled = !scanInProgress;
+
+            box = this.Controls.Find("checkBoxKeepFolderStructure", true).FirstOrDefault() as CheckBox;
+            box.Checked = Properties.Settings.Default.KeepDirectoryStructure;
             box.Enabled = !scanInProgress;
 
             Button buttonScan = this.Controls.Find("buttonScan", true).FirstOrDefault() as Button;
@@ -56,8 +63,8 @@ namespace BBP_WINFORMS
             buttonResize.Enabled = !scanInProgress;
 
             PictureBox pictureBoxPreview = this.Controls.Find("pictureBoxPreview", true).FirstOrDefault() as PictureBox;
-            if(previewImage != null)
-                pictureBoxPreview.Image = previewImage.ToBitmap();    
+            if (previewImage != null)
+                pictureBoxPreview.Image = previewImage.ToBitmap();
 
             //update results view
             ListView list = this.Controls.Find("listViewImages", true).FirstOrDefault() as ListView;
@@ -74,22 +81,28 @@ namespace BBP_WINFORMS
 
         private void ResizeImages(string[] images, Emgu.CV.CvEnum.INTER algo)
         {
+            NumericUpDown numericHeight = this.Controls.Find("numericUpDownHeight", true).FirstOrDefault() as NumericUpDown;
+            NumericUpDown numericWidth = this.Controls.Find("numericUpDownWidth", true).FirstOrDefault() as NumericUpDown;
+
             for (int i = 0; i < images.Length; ++i)
             {
+                FileInfo info = new FileInfo(images[i]);
+                string outputPath = Properties.Settings.Default.ImageOutputPath;
                 Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
-                Image<Bgr, byte> resizedImage = captureImage.Resize(50, 50, algo);
-                saveJpeg("test.jpg", resizedImage.ToBitmap(), 100);
+                Image<Bgr, byte> resizedImage = captureImage.Resize(Convert.ToInt32(numericWidth.Value), Convert.ToInt32(numericHeight.Value), algo);
+                // Make sure you have the rights to write to the directory! 
+                saveJpeg(outputPath + @"/" + info.Name, resizedImage.ToBitmap(), 100);
             }
         }
 
         private Task ResizeImagesAsync(string[] images, Emgu.CV.CvEnum.INTER algo)
         {
-            return Task.Run(()=> ResizeImages(images,algo));
+            return Task.Run(() => ResizeImages(images, algo));
         }
 
         private async void CallResizeImages()
         {
-            await ResizeImagesAsync(scanResults,Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            await ResizeImagesAsync(scanResults, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
             Console.WriteLine("Resizing did finish!");
         }
 
@@ -97,7 +110,7 @@ namespace BBP_WINFORMS
         {
             Console.WriteLine("Starting scan in path " + path);
             Queue<string> queue = new Queue<string>();
-            string[] results = {};
+            string[] results = { };
             queue.Enqueue(path);
             while (queue.Count > 0)
             {
@@ -112,7 +125,7 @@ namespace BBP_WINFORMS
                 //TODO we might miss some very deep paths by swallowing 'System.IO.PathTooLongException'
                 catch (Exception ex)
                 {
-                   // Console.Error.WriteLine(ex);
+                    // Console.Error.WriteLine(ex);
                 }
                 string[] files = null;
                 try
@@ -162,11 +175,12 @@ namespace BBP_WINFORMS
         {
             System.Windows.Forms.FolderBrowserDialog objDialog = new FolderBrowserDialog();
             objDialog.Description = "Beschreibung";
-            objDialog.SelectedPath = @"C:/";       // Vorgabe Pfad (und danach der gewählte Pfad)
+            objDialog.SelectedPath = "C:/";       // Vorgabe Pfad (und danach der gewählte Pfad)
             DialogResult objResult = objDialog.ShowDialog(this);
             if (objResult == DialogResult.OK)
             {
                 Properties.Settings.Default.ImageScanPath = objDialog.SelectedPath;
+                Properties.Settings.Default.Save();
             }
             updateUI();
         }
@@ -175,6 +189,7 @@ namespace BBP_WINFORMS
         {
             CheckBox box = sender as CheckBox;
             Properties.Settings.Default.RecursiveScan = box.Checked;
+            Properties.Settings.Default.Save();
             updateUI();
         }
 
@@ -228,6 +243,38 @@ namespace BBP_WINFORMS
                 if (codecs[i].MimeType == mimeType)
                     return codecs[i];
             return null;
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void BBPMainWindow_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void selectOutputDir(object sender, EventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog objDialog = new FolderBrowserDialog();
+            objDialog.Description = "Beschreibung";
+            objDialog.SelectedPath = "C:/";       // Vorgabe Pfad (und danach der gewählte Pfad)
+            DialogResult objResult = objDialog.ShowDialog(this);
+            if (objResult == DialogResult.OK)
+            {
+                Properties.Settings.Default.ImageOutputPath = objDialog.SelectedPath;
+                Properties.Settings.Default.Save();
+            }
+            updateUI();
+        }
+
+        private void checkBoxKeepFolderStructure_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox box = sender as CheckBox;
+            Properties.Settings.Default.KeepDirectoryStructure = box.Checked;
+            Properties.Settings.Default.Save();
+            updateUI();
         }
     }
 }
