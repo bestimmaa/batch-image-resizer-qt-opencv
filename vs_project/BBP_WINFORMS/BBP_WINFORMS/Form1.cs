@@ -83,16 +83,40 @@ namespace BBP_WINFORMS
         {
             NumericUpDown numericHeight = this.Controls.Find("numericUpDownHeight", true).FirstOrDefault() as NumericUpDown;
             NumericUpDown numericWidth = this.Controls.Find("numericUpDownWidth", true).FirstOrDefault() as NumericUpDown;
+            string scanPath = Properties.Settings.Default.ImageScanPath;
+            string outputPath = Properties.Settings.Default.ImageOutputPath;
 
-            for (int i = 0; i < images.Length; ++i)
+            if (Properties.Settings.Default.KeepDirectoryStructure)
             {
-                FileInfo info = new FileInfo(images[i]);
-                string outputPath = Properties.Settings.Default.ImageOutputPath;
-                Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
-                Image<Bgr, byte> resizedImage = captureImage.Resize(Convert.ToInt32(numericWidth.Value), Convert.ToInt32(numericHeight.Value), algo);
-                // Make sure you have the rights to write to the directory! 
-                saveJpeg(outputPath + @"/" + info.Name, resizedImage.ToBitmap(), 100);
+                for (int i = 0; i < images.Length; ++i)
+                {
+                    FileInfo fileInfo = new FileInfo(images[i]);
+                    //create folder if nessearcy
+                    string destinationPath = fileInfo.FullName;
+                    destinationPath = destinationPath.Replace(scanPath, outputPath);
+                    FileInfo destinationFileInfo = new FileInfo(destinationPath);
+                    destinationFileInfo.Directory.Create();
+                    string filepath = destinationFileInfo.FullName;
+                    Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
+                    Image<Bgr, byte> resizedImage = captureImage.Resize(Convert.ToInt32(numericWidth.Value), Convert.ToInt32(numericHeight.Value), algo);
+                    // Make sure you have the rights to write to the directory! 
+                    saveJpeg(filepath, resizedImage.ToBitmap(), 100);
+                }
             }
+
+            else
+            {
+                for (int i = 0; i < images.Length; ++i)
+                {
+                    FileInfo fileInfo = new FileInfo(images[i]);
+                    Image<Bgr, Byte> captureImage = new Image<Bgr, byte>(images[i]);
+                    Image<Bgr, byte> resizedImage = captureImage.Resize(Convert.ToInt32(numericWidth.Value), Convert.ToInt32(numericHeight.Value), algo);
+                    // Make sure you have the rights to write to the directory! 
+                    saveJpeg(outputPath+@"\"+fileInfo.Name, resizedImage.ToBitmap(), 100);
+                }
+            }
+
+
         }
 
         private Task ResizeImagesAsync(string[] images, Emgu.CV.CvEnum.INTER algo)
