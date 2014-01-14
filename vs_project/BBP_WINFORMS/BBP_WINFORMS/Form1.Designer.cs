@@ -176,11 +176,13 @@
             // 
             // comboBoxAlgorithm
             // 
+            this.comboBoxAlgorithm.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAlgorithm.FormattingEnabled = true;
             this.comboBoxAlgorithm.Location = new System.Drawing.Point(3, 188);
             this.comboBoxAlgorithm.Name = "comboBoxAlgorithm";
             this.comboBoxAlgorithm.Size = new System.Drawing.Size(160, 21);
             this.comboBoxAlgorithm.TabIndex = 5;
+            this.comboBoxAlgorithm.SelectedIndexChanged += new System.EventHandler(this.algorithmSelectionDidChange);
             // 
             // buttonResizeImages
             // 

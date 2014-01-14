@@ -32,7 +32,7 @@ namespace BBP_WINFORMS
 
         private void setupUI()
         {
-            var algorithms = new[] { "bilinear", "pixel area relation", "bicubic (4x4)", "Lanczos (8x8)" };
+            var algorithms = new[] { "Bilinear", "Pixel Area Relation", "Bicubic (4x4)", "Lanczos (8x8)", "Nearest Neighbor" };
             ComboBox tbx = this.Controls.Find("comboBoxAlgorithm", true).FirstOrDefault() as ComboBox;
             tbx.DataSource = algorithms;
         }
@@ -102,7 +102,27 @@ namespace BBP_WINFORMS
 
         private async void CallResizeImages()
         {
-            await ResizeImagesAsync(scanResults, Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR);
+            Emgu.CV.CvEnum.INTER algo = 0;
+            ComboBox box = this.Controls.Find("comboBoxAlgorithm", true).FirstOrDefault() as ComboBox;
+            switch (box.SelectedIndex){
+                case 0:
+                    algo = Emgu.CV.CvEnum.INTER.CV_INTER_LINEAR;
+                    break;
+                case 1:
+                    algo = Emgu.CV.CvEnum.INTER.CV_INTER_AREA;
+                    break;
+                case 2:
+                    algo = Emgu.CV.CvEnum.INTER.CV_INTER_CUBIC;
+                    break;
+                case 3:
+                    algo = Emgu.CV.CvEnum.INTER.CV_INTER_LANCZOS4;
+                    break;
+                case 4:
+                    algo = Emgu.CV.CvEnum.INTER.CV_INTER_NN;
+                    break;
+            }
+
+            await ResizeImagesAsync(scanResults, algo);
             Console.WriteLine("Resizing did finish!");
         }
 
@@ -275,6 +295,11 @@ namespace BBP_WINFORMS
             Properties.Settings.Default.KeepDirectoryStructure = box.Checked;
             Properties.Settings.Default.Save();
             updateUI();
+        }
+
+        private void algorithmSelectionDidChange(object sender, EventArgs e)
+        {
+
         }
     }
 }
