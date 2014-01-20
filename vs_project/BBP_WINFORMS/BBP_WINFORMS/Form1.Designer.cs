@@ -234,6 +234,7 @@
             this.listViewImages.Size = new System.Drawing.Size(545, 748);
             this.listViewImages.TabIndex = 5;
             this.listViewImages.UseCompatibleStateImageBehavior = false;
+            this.listViewImages.View = System.Windows.Forms.View.List;
             this.listViewImages.SelectedIndexChanged += new System.EventHandler(this.didSelectImage);
             // 
             // flowLayoutPanel1
