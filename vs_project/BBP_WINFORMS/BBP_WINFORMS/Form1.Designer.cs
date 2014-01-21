@@ -223,7 +223,6 @@
             this.labelOutputDir.Size = new System.Drawing.Size(55, 13);
             this.labelOutputDir.TabIndex = 7;
             this.labelOutputDir.Text = "Output Dir";
-            this.labelOutputDir.Click += new System.EventHandler(this.label4_Click);
             // 
             // listViewImages
             // 
@@ -283,7 +282,6 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 330F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(396, 748);
             this.tableLayoutPanel1.TabIndex = 9;
-            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint_1);
             // 
             // splitContainer1
             // 
@@ -294,7 +292,6 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.tableLayoutPanel1);
-            this.splitContainer1.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel1_Paint);
             // 
             // splitContainer1.Panel2
             // 

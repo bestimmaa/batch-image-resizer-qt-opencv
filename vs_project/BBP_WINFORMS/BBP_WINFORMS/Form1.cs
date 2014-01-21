@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Security.Permissions;
 using System.IO;
 using Emgu.CV;
 using Emgu.Util;
@@ -74,10 +75,7 @@ namespace BBP_WINFORMS
         }
 
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-        {
 
-        }
 
         private void ResizeImages(string[] images, Emgu.CV.CvEnum.INTER algo)
         {
@@ -289,11 +287,6 @@ namespace BBP_WINFORMS
             return null;
         }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void BBPMainWindow_Load(object sender, EventArgs e)
         {
 
@@ -322,16 +315,6 @@ namespace BBP_WINFORMS
         }
 
         private void algorithmSelectionDidChange(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel1_Paint_1(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
         {
 
         }
