@@ -11,6 +11,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = bbp
 TEMPLATE = app
 
+# set compiler flags, we don't need any here
+
+#QMAKE_CXXFLAGS += -stdlib=libstdc++
+
+# set the deployment target on for mac os x
+
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 
 SOURCES += main.cpp\
