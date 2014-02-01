@@ -11,6 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = bbp
 TEMPLATE = app
 
+QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -47,3 +48,15 @@ else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/open
 
 INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
 DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
+
+# this should fit most opencv installations on OS X including homebrew
+
+macx: LIBS += -L/usr/local/lib/ \
+    -lopencv_core \
+    -lopencv_imgproc \
+    -lopencv_calib3d \
+    -lopencv_highgui
+
+
+INCLUDEPATH += /usr/local/include
+DEPENDPATH += /usr/local/include
