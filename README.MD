@@ -1,6 +1,6 @@
 #BBP
 
-A simple batch image resizer written in C# and .NET 4.5 using the [OpenCV](http://opencv.org) library with EMGU and [WidowsForms](http://msdn.microsoft.com/de-de/library/dd30h2yb.aspx) for its GUI
+A simple batch image resizer written in C# and .NET 4.5 using the [OpenCV](http://opencv.org) library with [EMGU](http://www.emgu.com) and [WindowsForms](http://msdn.microsoft.com/de-de/library/dd30h2yb.aspx) for its GUI
 
 ## Install dependendies for BBP_WINFORMS
 
