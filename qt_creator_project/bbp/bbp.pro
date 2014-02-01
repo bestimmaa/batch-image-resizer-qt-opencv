@@ -15,7 +15,7 @@ TEMPLATE = app
 
 #QMAKE_CXXFLAGS += -stdlib=libstdc++
 
-# set the deployment target on for mac os x
+# set the deployment target on for mac os x (TODO: this might hide a linking error related to OpenCV)
 
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.9
 
