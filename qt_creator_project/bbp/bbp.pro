@@ -31,38 +31,31 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     outputdirectorydialog.ui
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_core247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib -lopencv_core247d
+# this should fit a default opencv windows installation in C:/opencv
 
-INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
-DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
+win32:CONFIG(debug, debug|release){
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_highgui247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_highgui247d
+LIBS += -LC:/opencv/build/x64/vc11/lib -lopencv_core247d -lopencv_imgproc247d -lopencv_imgproc247d -lopencv_calib3d247d
+INCLUDEPATH += "C:/opencv/build/include"
+DEPENDPATH += "C:/opencv/build/include"
+}
 
-INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
-DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
+win32:CONFIG(release, debug|release){
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_imgproc247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_imgproc247d
-
-INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
-DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_calib3d247
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../dependencies/opencv/build/x64/vc11/lib/ -lopencv_calib3d247d
-
-INCLUDEPATH += $$PWD/../../dependencies/opencv/build/include
-DEPENDPATH += $$PWD/../../dependencies/opencv/build/include
+LIBS += -LC:/opencv/build/x64/vc11/lib/ -lopencv_core247 -lopencv_highgui247 -lopencv_imgproc247 -lopencv_calib3d247
+INCLUDEPATH += "C:/opencv/build/include"
+DEPENDPATH += "C:/opencv/build/include"
+}
 
 # this should fit most opencv installations on OS X including homebrew
 
-macx: LIBS += -L/usr/local/lib/ \
+macx{
+LIBS += -L/usr/local/lib/ \
     -lopencv_core \
     -lopencv_imgproc \
     -lopencv_calib3d \
     -lopencv_highgui
 
-
 INCLUDEPATH += /usr/local/include
 DEPENDPATH += /usr/local/include
+}
