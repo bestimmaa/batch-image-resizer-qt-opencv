@@ -1,13 +1,13 @@
 A simple batch image resizer written with C++, Qt and OpenCV
 
-## Dependenciesetelsen
+## Dependencies
 
 * QT 5
 * OpenCV
 
 ## Running on Windows
 
-In order to run the app you have to copy the following files and folders to your build directory where your bbp.exe file is located. Use the versions ending in 'd' for the debug configuration. You may need to add additional libraries used. 
+In order to run the app from Qt Creator you have to copy the following files and folders to your build directory where your bbp.exe file is located. Use the versions ending in 'd' for the debug configuration. You may need to add additional libraries used. 
 
 ### QT 5 (C:\Qt\Qt5.2.0\5.2.0\msvc2012_64_opengl\bin)
 
@@ -34,4 +34,4 @@ In addtion to the DLL files listed above add the following folders from *C:\Qt\Q
 * platforms/
 * imageformats/
 
-You should be able to distribute the *release* folder. Make sure to install the [Visual C++ Redistributable for Visual Studio 2012](http://www.microsoft.com/en-us/download/confirmation.aspx?id=30679) on any computer that run the application.
+You should be able to distribute the *release* folder. Make sure to install the [Visual C++ Redistributable for Visual Studio 2012](http://www.microsoft.com/en-us/download/confirmation.aspx?id=30679) on any computer that runs the application.
