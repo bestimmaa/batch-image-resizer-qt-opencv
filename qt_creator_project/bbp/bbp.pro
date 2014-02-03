@@ -35,7 +35,7 @@ FORMS    += mainwindow.ui \
 
 win32:CONFIG(debug, debug|release){
 
-LIBS += -LC:/opencv/build/x64/vc11/lib -lopencv_core247d -lopencv_imgproc247d -lopencv_imgproc247d -lopencv_calib3d247d
+LIBS += -LC:/opencv/build/x64/vc11/lib -lopencv_core247d -lopencv_highgui247d -lopencv_imgproc247d -lopencv_calib3d247d
 INCLUDEPATH += "C:/opencv/build/include"
 DEPENDPATH += "C:/opencv/build/include"
 }
