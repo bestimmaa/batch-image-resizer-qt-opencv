@@ -1,6 +1,6 @@
 A simple batch image resizer written with C++, Qt and OpenCV
 
-## Dependencies
+## Dependenciesetelsen
 
 * QT 5
 * OpenCV
@@ -17,8 +17,6 @@ In order to run the app you have to copy the following files and folders to your
 * icudt51.dll
 * icuin51.dll
 * icuuc51.dll
-* *platforms/*
-* *plugins/*
 
 ### OpenCV (C:\opencv)
 
@@ -29,4 +27,11 @@ In order to run the app you have to copy the following files and folders to your
 * *libGLESv2(d).dll*
 
 
+## Deployment on Windows
 
+In addtion to the DLL files listed above add the following folders from *C:\Qt\Qt5.2.0\5.2.0\msvc2012_64_opengl\plugins* to your *\batch-image-resizer\qt_creator_project\build-bbp-Desktop_Qt_5_2_0_MSVC2012_OpenGL_64bit-Release\release* folder:
+
+* platforms/
+* imageformats/
+
+You should be able to distribute the *release* folder. Make sure to install the [Visual C++ Redistributable for Visual Studio 2012](http://www.microsoft.com/en-us/download/confirmation.aspx?id=30679) on any computer that run the application.
