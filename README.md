@@ -1,5 +1,7 @@
 A simple batch image resizer written with C++, Qt and OpenCV
 
+![Screenshot](https://github.com/bestimmaa/batch-image-resizer-qt-opencv/blob/master/bbp_screenshot.png?raw=true)
+
 ## Dependencies
 
 * Qt 5
